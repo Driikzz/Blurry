@@ -1,20 +1,36 @@
 {
-  "name": "blurry",
-  "version": "1.0.0",
-  "description": "",
-  "homepage": "https://github.com/Driikzz/Blurry#readme",
-  "bugs": {
-    "url": "https://github.com/Driikzz/Blurry/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Driikzz/Blurry.git"
-  },
-  "license": "ISC",
-  "author": "Rémi et Tom",
-  "type": "commonjs",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  }
+   "name": "blurry",
+   "version": "1.0.0",
+   "description": "",
+   "homepage": "https://github.com/Driikzz/Blurry#readme",
+   "bugs": {
+      "url": "https://github.com/Driikzz/Blurry/issues"
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Driikzz/Blurry.git"
+   },
+   "license": "ISC",
+   "author": "Rémi et Tom",
+   "type": "commonjs",
+   "main": "index.js",
+   "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "dev": "nodemon src/index.ts",
+      "start": "ts-node src/index.ts",
+      "typeorm": "typeorm-ts-node-commonjs"
+   },
+   "devDependencies": {
+      "@types/express": "^5.0.6",
+      "@types/node": "^25.9.1",
+      "nodemon": "^3.1.14",
+      "ts-node": "^10.9.2",
+      "typescript": "^6.0.3"
+   },
+   "dependencies": {
+      "better-sqlite3": "^12.10.0",
+      "express": "^5.2.1",
+      "reflect-metadata": "^0.2.2",
+      "typeorm": "1.0.0"
+   }
 }
