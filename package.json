@@ -18,7 +18,8 @@
       "test": "echo \"Error: no test specified\" && exit 1",
       "dev": "nodemon src/index.ts",
       "start": "ts-node src/index.ts",
-      "typeorm": "typeorm-ts-node-commonjs"
+      "typeorm": "typeorm-ts-node-commonjs",
+      "build": "tsc"
    },
    "devDependencies": {
       "@types/express": "^5.0.6",
