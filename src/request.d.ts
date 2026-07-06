@@ -3,6 +3,6 @@ import "express";
 
 declare module "express" {
   interface Request {
-    user?: User | undefined;
+    user?: User | undefined | null;
   }
 }

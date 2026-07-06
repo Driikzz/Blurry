@@ -5,7 +5,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
+  OneToMany,
 } from "typeorm";
+import { Quiz } from "./Quiz";
 import { UserDto } from "../dtos/Users";
 
 @Entity()
@@ -21,6 +23,9 @@ export class User extends BaseEntity {
 
   @Column()
   password!: string;
+
+  @OneToMany(() => Quiz, (quiz) => quiz.createdBy)
+  quiz!: Quiz[];
 
   @CreateDateColumn()
   createdAt!: Date;

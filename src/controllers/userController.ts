@@ -23,19 +23,10 @@ export class UserController {
     }
   };
 
-  //   create = async (req: Request, res: Response) => {
-  //     const userData = req.body;
-  //     console.log("User data", userData);
-  //     try {
-  //       if (!userData) {
-  //         return res.status(400).json({ message: "User data is required" });
-  //       }
-  //       const response = await this.userService.create(userData);
-  //       return res.status(201).json(response);
-  //     } catch (error: unknown) {
-  //       res.status(500).json({ message: "Error creating user", error });
-  //     }
-  //   };
+  getConnectedUserInfos = async (req: Request, res: Response) => {
+    const data = req.user?.toUserDto();
+    return res.status(200).json(data);
+  };
 
   update = async (req: Request, res: Response) => {
     const id = Number(req.params.id);

@@ -1,11 +1,15 @@
 import express, { Request, Response } from "express";
+import cookieParser from "cookie-parser";
 import { AppDataSource } from "./data-source";
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 const userRouter = require("./routes/users.routes");
 const gamesRouter = require("./routes/games.routes");
+const quizRouter = require("./routes/quiz.routes");
 const authRouter = require("./routes/auth.routes");
+require("dotenv").config();
 
 async function main() {
   await AppDataSource.initialize();
@@ -16,6 +20,7 @@ async function main() {
 
   app.use("/users", userRouter);
   app.use("/games", gamesRouter);
+  app.use("/quiz", quizRouter);
   app.use("/auth", authRouter);
 
   app.use((req, res) => {

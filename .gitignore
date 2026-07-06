@@ -5,3 +5,4 @@ tmp/
 temp/
 dist/
 db/
+.env

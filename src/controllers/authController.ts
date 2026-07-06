@@ -11,10 +11,12 @@ import { Request, Response } from "express";
 export class AuthController {
   authservice: AuthService;
   crypto: any;
+  jwt: any;
 
   constructor() {
     this.authservice = new AuthService();
     this.crypto = require("crypto");
+    this.jwt = require("jsonwebtoken");
   }
 
   async register(req: Request, res: Response) {
@@ -68,14 +70,30 @@ export class AuthController {
       if (
         this.authservice.verifyPassword(datas.password, existingUser.password)
       ) {
-        return res.status(200).json(existingUser.toUserDto());
+        const token = this.authservice.createToken(existingUser.id);
+
+        res
+          .cookie("token", token, {
+            httpOnly: true,
+            secure: false,
+          })
+          .send({ success: true });
       } else {
         return res.status(401).json({ message: "Wrong credentials" });
       }
     } catch (error) {
       return res.status(500).json({
-        message: "Internal server error",
+        message: error,
       });
     }
+  }
+
+  async logout(req: Request, res: Response) {
+    res
+      .clearCookie("token", {
+        httpOnly: true,
+        secure: false,
+      })
+      .send({ success: true });
   }
 }

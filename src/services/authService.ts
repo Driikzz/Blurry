@@ -3,9 +3,11 @@ import { User } from "../entities/User";
 
 export class AuthService {
   crypto: any;
+  jwt: any;
 
   constructor() {
     this.crypto = require("crypto");
+    this.jwt = require("jsonwebtoken");
   }
 
   hashPassword(password: string) {
@@ -33,5 +35,16 @@ export class AuthService {
     var testedHashedPassword = this.hashPassword(password);
 
     return testedHashedPassword === hashedPassword;
+  }
+
+  createToken(userId: number) {
+    let data = {
+      time: Date(),
+      userId: userId,
+    };
+
+    return this.jwt.sign(data, process.env.JWT_SECRET_KEY, {
+      expiresIn: "1d",
+    });
   }
 }
