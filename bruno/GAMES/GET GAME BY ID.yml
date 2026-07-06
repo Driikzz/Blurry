@@ -1,0 +1,19 @@
+info:
+  name: GET GAME BY ID
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{baseUrl}}/games/:id"
+  params:
+    - name: id
+      value: "12"
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
