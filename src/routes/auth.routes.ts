@@ -10,5 +10,8 @@ router.post("/login", (req: Request, res: Response) =>
 router.post("/register", (req: Request, res: Response) =>
   controller.register(req, res)
 );
+router.post("/logout", (req: Request, res: Response) =>
+  controller.logout(req, res)
+);
 
 module.exports = router;
