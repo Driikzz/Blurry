@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { userService } from "../services/userService";
+import { UserService } from "../services/userService";
 
 export class UserController {
-  constructor(private readonly userService: userService) {}
+  constructor(private readonly userService: UserService) {}
 
   getAll = async (req: Request, res: Response) => {
     try {
@@ -25,6 +25,7 @@ export class UserController {
 
   create = async (req: Request, res: Response) => {
     const userData = req.body;
+    console.log("User data", userData);
     try {
       if (!userData) {
         return res.status(400).json({ message: "User data is required" });
@@ -37,26 +38,26 @@ export class UserController {
   };
 
   update = async (req: Request, res: Response) => {
-    // const id = req.params.id;
-    // const userData = req.body;
-    // try {
-    //   if (!userData) {
-    //     return res.status(400).json({ message: "User data is required" });
-    //   }
-    //   const response = await this.userService.update(id, userData);
-    //   return res.status(200).json(response);
-    // } catch (error: unknown) {
-    //   res.status(500).json({ message: "Error updating user", error });
-    // }
+    const id = Number(req.params.id);
+    const userData = req.body;
+    try {
+      if (!userData) {
+        return res.status(400).json({ message: "User data is required" });
+      }
+      const response = await this.userService.update(id, userData);
+      return res.status(200).json(response);
+    } catch (error: unknown) {
+      res.status(500).json({ message: "Error updating user", error });
+    }
   };
 
   delete = async (req: Request, res: Response) => {
-    // const id = req.params.id;
-    // try {
-    //   const response = await this.userService.delete(id);
-    //   return res.status(200).json(response);
-    // } catch (error: unknown) {
-    //   res.status(500).json({ message: "Error deleting user", error });
-    // }
+    const id = Number(req.params.id);
+    try {
+      const response = await this.userService.delete(id);
+      return res.status(200).json(response);
+    } catch (error: unknown) {
+      res.status(500).json({ message: "Error deleting user", error });
+    }
   };
 }

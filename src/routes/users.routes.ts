@@ -4,10 +4,10 @@ import express, {
   type NextFunction,
 } from "express";
 import { UserController } from "../controllers/userController";
-import { userService } from "../services/userService";
+import { UserService } from "../services/userService";
 
 const router = express.Router();
-const service = new userService();
+const service = new UserService();
 const controller = new UserController(service);
 
 router.get("/:id", (req: Request, res: Response) =>

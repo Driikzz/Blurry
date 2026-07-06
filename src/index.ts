@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { AppDataSource } from "./data-source";
 
 const app = express();
+app.use(express.json());
 const userRouter = require("./routes/users.routes");
 const gamesRouter = require("./routes/games.routes");
 

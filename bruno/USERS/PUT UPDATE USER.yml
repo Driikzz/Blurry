@@ -1,0 +1,23 @@
+info:
+  name: PUT UPDATE USER
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/users/1"
+  body:
+    type: json
+    data: |-
+      {
+        "name":"Rémi1",
+        "email":"remisalles@gmail.com",
+        "password":"a"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
