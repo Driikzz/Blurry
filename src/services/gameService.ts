@@ -4,23 +4,22 @@ import { Game } from "../entities/Game";
 import { GameNotFoundException } from "../exceptions/GameNotFoundException";
 
 export class GameService {
-  async getGameByID(id: number): Promise<Game> {
+  async getGameByID(id: number): Promise<GameDto> {
     const game: Game | null = await Game.findOneBy({ id: id });
 
     if (game == null)
       throw new GameNotFoundException(`game with id ${id} not found`);
 
-    return game;
+    return game.toGameDto();
   }
 
   async getAllGames(): Promise<PaginatedResult<GameDto>> {
-    const games: [Game[], number] = await Game.findAndCount();
+    const [games, total]: [Game[], number] = await Game.findAndCount();
 
-    const results: PaginatedResult<GameDto> = {
-      totalResult: games[1],
+    return {
+      totalResult: total,
       page: 0,
-      results: games,
+      results: games.map((game) => game.toGameDto()),
     };
-    return results;
   }
 }

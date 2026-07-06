@@ -7,6 +7,7 @@ import {
   JoinTable,
 } from "typeorm";
 import { User } from "./User";
+import { GameDto } from "../dtos/Games";
 
 @Entity()
 export class Game extends BaseEntity {
@@ -19,4 +20,12 @@ export class Game extends BaseEntity {
   @ManyToMany(() => User)
   @JoinTable()
   users!: User[];
+
+  toGameDto(): GameDto {
+    return {
+      id: this.id,
+      name: this.name,
+      users: [], // TODO change
+    };
+  }
 }

@@ -9,8 +9,15 @@ export class GameController {
     this.gameService = new GameService();
   }
 
-  getAll = (req: Request, res: Response) => {
-    // ...
+  getAll = async (req: Request, res: Response) => {
+    try {
+      const result = await this.gameService.getAllGames();
+      return res.status(200).json(result);
+    } catch (error) {
+      return res.status(500).json({
+        message: "Internal server error",
+      });
+    }
   };
 
   getById = async (req: Request, res: Response) => {
