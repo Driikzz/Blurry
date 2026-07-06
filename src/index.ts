@@ -3,6 +3,7 @@ import { AppDataSource } from "./data-source";
 
 const app = express();
 const userRouter = require("./routes/users.routes");
+const gamesRouter = require("./routes/games.routes");
 
 async function main() {
   await AppDataSource.initialize();
@@ -12,6 +13,7 @@ async function main() {
   });
 
   app.use("/users", userRouter);
+  app.use("/games", gamesRouter);
 
   app.use((req, res) => {
     res.status(404).json({ message: "Route not found" });
