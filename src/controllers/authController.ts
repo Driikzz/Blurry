@@ -1,4 +1,10 @@
-import { UserLoginDto, UserPostDto } from "../dtos/Users";
+import { validate } from "class-validator";
+import {
+  UserCreateValidator,
+  UserLoginDto,
+  UserLoginValidator,
+  UserPostDto,
+} from "../dtos/Users";
 import { AuthService } from "../services/authService";
 import { Request, Response } from "express";
 
@@ -14,6 +20,16 @@ export class AuthController {
   async register(req: Request, res: Response) {
     try {
       const datas: UserPostDto = req.body;
+
+      const dto = new UserCreateValidator();
+      dto.name = datas.name;
+      dto.email = datas.email;
+      dto.password = datas.password;
+
+      const errors = await validate(dto);
+      if (errors.length > 0) {
+        return res.status(400).json({ message: "Invalid user data", errors });
+      }
 
       const existingUser = await this.authservice.getUserByEmail(datas.email);
       if (existingUser)
@@ -33,6 +49,15 @@ export class AuthController {
   async login(req: Request, res: Response) {
     try {
       const datas: UserLoginDto = req.body;
+
+      const dto = new UserLoginValidator();
+      dto.email = datas.email;
+      dto.password = datas.password;
+
+      const errors = await validate(dto);
+      if (errors.length > 0) {
+        return res.status(400).json({ message: "Invalid user data", errors });
+      }
 
       const existingUser = await this.authservice.getUserByEmail(datas.email);
       if (!existingUser)

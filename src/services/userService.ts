@@ -1,4 +1,10 @@
-import { UserDto } from "../dtos/Users";
+import { validate } from "class-validator";
+import {
+  UserCreateValidator,
+  UserDto,
+  UserPostDto,
+  UserUpdateValidator,
+} from "../dtos/Users";
 import { User } from "../entities/User";
 
 export class UserService {
@@ -12,14 +18,34 @@ export class UserService {
     return user?.toUserDto();
   }
 
-  async create(userData: UserDto) {
-    const newUser = new User();
-    Object.assign(newUser, userData);
-    await newUser.save();
-    return newUser.toUserDto();
-  }
+  //   async create(userData: UserPostDto) {
+  //     const dto = new UserCreateValidator();
+  //     dto.name = userData.name;
+  //     dto.email = userData.email;
+  //     dto.password = userData.password;
 
-  async update(id: number, userData: UserDto) {
+  //     const errors = await validate(dto);
+  //     if (errors.length > 0) {
+  //       return { message: "Validation failed", errors };
+  //     }
+
+  //     const user = new User();
+  //     Object.assign(user, userData);
+  //     await user.save();
+  //     return user.toUserDto();
+  //   }
+
+  async update(id: number, userData: UserPostDto) {
+    const dto = new UserUpdateValidator();
+    dto.name = userData.name;
+    dto.email = userData.email;
+    dto.password = userData.password;
+
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      return { message: "Validation failed", errors };
+    }
+
     const user = await User.findOne({ where: { id } });
     if (!user) {
       throw new Error("User not found");
