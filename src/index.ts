@@ -5,6 +5,7 @@ const app = express();
 app.use(express.json());
 const userRouter = require("./routes/users.routes");
 const gamesRouter = require("./routes/games.routes");
+const authRouter = require("./routes/auth.routes");
 
 async function main() {
   await AppDataSource.initialize();
@@ -15,6 +16,7 @@ async function main() {
 
   app.use("/users", userRouter);
   app.use("/games", gamesRouter);
+  app.use("/auth", authRouter);
 
   app.use((req, res) => {
     res.status(404).json({ message: "Route not found" });

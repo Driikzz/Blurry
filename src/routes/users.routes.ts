@@ -16,7 +16,7 @@ router.get("/:id", (req: Request, res: Response) =>
 
 router.get("/", (req: Request, res: Response) => controller.getAll(req, res));
 
-router.post("/", (req: Request, res: Response) => controller.create(req, res));
+// router.post("/", (req: Request, res: Response) => controller.create(req, res));
 
 router.put("/:id", (req: Request, res: Response) =>
   controller.update(req, res)
