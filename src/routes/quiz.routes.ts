@@ -16,7 +16,7 @@ router.put("/:id", requireConnected, (req: Request, res: Response) =>
   controller.update(req, res)
 );
 router.delete("/:id", requireConnected, (req: Request, res: Response) =>
-  controller.update(req, res)
+  controller.delete(req, res)
 );
 
 module.exports = router;

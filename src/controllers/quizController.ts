@@ -17,7 +17,7 @@ export class QuizController {
 
   getById = async (req: Request, res: Response) => {
     const quizId = Number(req.params.id);
-    if (!quizId) return res.status(400);
+    if (!quizId) return res.status(400).send();
 
     const quiz = await this.quizService.getQuizWithInclude(quizId);
 
@@ -42,9 +42,9 @@ export class QuizController {
 
   delete = async (req: Request, res: Response) => {
     const quizId = Number(req.params.id);
-    if (!quizId) return res.status(400);
+    if (!quizId) return res.status(400).send();
 
-    const quiz = await this.quizService.getQuizMinimal(quizId);
+    const quiz = await this.quizService.getQuizWithInclude(quizId);
 
     if (!quiz)
       return res
@@ -56,6 +56,6 @@ export class QuizController {
 
     await Quiz.delete({ id: quizId });
 
-    return res.status(204);
+    return res.status(204).send();
   };
 }

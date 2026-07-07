@@ -19,7 +19,7 @@ export class Question extends BaseEntity {
   @Column({ nullable: false })
   response!: string;
 
-  @ManyToOne(() => Quiz, (quiz) => quiz.questions)
+  @ManyToOne(() => Quiz, (quiz) => quiz.questions, { onDelete: "CASCADE" })
   quiz!: Quiz;
 
   toQuestionDto(): QuestionDto {

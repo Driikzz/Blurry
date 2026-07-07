@@ -1,14 +1,14 @@
 info:
-  name: GET QUIZ BY ID
+  name: DELETE QUIZ
   type: http
-  seq: 1
+  seq: 5
 
 http:
-  method: GET
+  method: DELETE
   url: "{{baseUrl}}/quiz/:id"
   params:
     - name: id
-      value: "1"
+      value: "2"
       type: path
   auth: inherit
 
