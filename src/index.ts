@@ -18,6 +18,10 @@ async function main() {
     response.status(200).send("Hello World");
   });
 
+  app.get("/health", (request: Request, response: Response) => {
+    response.status(200).json({ status: "ok" });
+  });
+
   app.use("/users", userRouter);
   app.use("/games", gamesRouter);
   app.use("/quiz", quizRouter);

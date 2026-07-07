@@ -1,4 +1,4 @@
-FROM node:25.6.1-alpine3.23 AS builder
+FROM node:25.6.1-alpine3.23 AS base
 
 WORKDIR /app
 
@@ -9,16 +9,22 @@ RUN npm i
 COPY tsconfig.json tsconfig.json
 COPY src src
 
+FROM base AS dev
+
+CMD ["npm", "run", "dev"]
+
+FROM base AS builder
+
 RUN npm run build
 
-FROM node:25.6.1-alpine3.23
+FROM node:25.6.1-alpine3.23 AS production
 
 WORKDIR /app
 
 COPY --from=builder /app/dist ./dist
 
 COPY package.json package.json
-COPY package.lock.json package.lock.json
+COPY package-lock.json package-lock.json
 RUN npm i
 
 CMD ["npm", "run", "start"]

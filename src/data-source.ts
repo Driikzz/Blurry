@@ -1,10 +1,15 @@
-import "reflect-metadata"
-import { DataSource } from "typeorm"
+import "reflect-metadata";
+import "dotenv/config";
+import { DataSource } from "typeorm";
 
 export const AppDataSource = new DataSource({
-    type: "better-sqlite3",
-    database: "db/database.sqlite",
-    synchronize: true,
-    logging: true,
-    entities: [__dirname + "/entities/*.{ts,js}"],
-})
+  type: "postgres",
+  host: process.env.DB_HOST || "database",
+  port: Number(process.env.DB_PORT) || 5432,
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DB || process.env.POSTGRES_USER,
+  synchronize: true,
+  logging: true,
+  entities: [__dirname + "/entities/*.{ts,js}"],
+});
