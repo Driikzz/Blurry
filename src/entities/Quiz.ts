@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { User } from "./User";
 import { Question } from "./Question";
+import { QuizDto } from "../dtos/Quiz";
 
 @Entity()
 export class Quiz extends BaseEntity {
@@ -19,7 +20,7 @@ export class Quiz extends BaseEntity {
   @Column()
   name!: string;
 
-  @OneToMany(() => Question, (question) => question.quiz)
+  @OneToMany(() => Question, (question) => question.quiz, { cascade: true })
   questions!: Question[];
 
   @ManyToOne(() => User, (user) => user.quiz)
@@ -30,4 +31,15 @@ export class Quiz extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
+  toQuizDto(): QuizDto {
+    return {
+      id: this.id,
+      name: this.name,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      createdBy: this.createdBy.toUserDto(),
+      questions: this.questions.map((q) => q.toQuestionDto()),
+    };
+  }
 }

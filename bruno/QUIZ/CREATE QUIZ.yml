@@ -1,0 +1,35 @@
+info:
+  name: CREATE QUIZ
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/quiz"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Quiz spécial cinéma",
+        "questions": [
+          {
+            "statement": "Quel est le nom de ce film ?",
+            "response": "Interstellar"
+          },
+          {
+            "statement": "Quel est le nom de ce film ?",
+            "response": "Django Unchained"
+          },
+          {
+            "statement": "Quel est le nom de cette série ?",
+            "response": "Breaking Bad"
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
