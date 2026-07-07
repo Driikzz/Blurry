@@ -36,16 +36,6 @@ export class UserService {
   //   }
 
   async update(id: number, userData: UserPostDto) {
-    const dto = new UserUpdateValidator();
-    dto.name = userData.name;
-    dto.email = userData.email;
-    dto.password = userData.password;
-
-    const errors = await validate(dto);
-    if (errors.length > 0) {
-      return { message: "Validation failed", errors };
-    }
-
     const user = await User.findOne({ where: { id } });
     if (!user) {
       throw new Error("User not found");

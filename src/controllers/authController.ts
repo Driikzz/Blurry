@@ -23,16 +23,6 @@ export class AuthController {
     try {
       const datas: UserPostDto = req.body;
 
-      const dto = new UserCreateValidator();
-      dto.name = datas.name;
-      dto.email = datas.email;
-      dto.password = datas.password;
-
-      const errors = await validate(dto);
-      if (errors.length > 0) {
-        return res.status(400).json({ message: "Invalid user data", errors });
-      }
-
       const existingUser = await this.authservice.getUserByEmail(datas.email);
       if (existingUser)
         return res
@@ -51,15 +41,6 @@ export class AuthController {
   async login(req: Request, res: Response) {
     try {
       const datas: UserLoginDto = req.body;
-
-      const dto = new UserLoginValidator();
-      dto.email = datas.email;
-      dto.password = datas.password;
-
-      const errors = await validate(dto);
-      if (errors.length > 0) {
-        return res.status(400).json({ message: "Invalid user data", errors });
-      }
 
       const existingUser = await this.authservice.getUserByEmail(datas.email);
       if (!existingUser)

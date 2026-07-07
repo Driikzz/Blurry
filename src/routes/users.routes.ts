@@ -6,6 +6,7 @@ import express, {
 import { UserController } from "../controllers/userController";
 import { UserService } from "../services/userService";
 import { requireConnected } from "../middlewares/auth.middleware";
+import { userUpdateValidator } from "../middlewares/validator.middleware";
 
 const router = express.Router();
 const service = new UserService();
@@ -21,7 +22,7 @@ router.get("/:id", (req: Request, res: Response) =>
 
 router.get("/", (req: Request, res: Response) => controller.getAll(req, res));
 
-router.put("/:id", (req: Request, res: Response) =>
+router.put("/:id", userUpdateValidator, (req: Request, res: Response) =>
   controller.update(req, res)
 );
 
