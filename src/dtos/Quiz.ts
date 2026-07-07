@@ -14,3 +14,7 @@ export interface QuizPostDto {
   name: string;
   questions: QuestionPostDto[];
 }
+
+export interface QuizPutDto {
+  name: string;
+}

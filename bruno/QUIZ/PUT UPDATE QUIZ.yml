@@ -8,23 +8,13 @@ http:
   url: "{{baseUrl}}/quiz/:id"
   params:
     - name: id
-      value: "1"
+      value: "4"
       type: path
   body:
     type: json
     data: |-
       {
-        "name": "Quiz spécial cinéma (modifié)",
-        "questions": [
-          {
-            "statement": "Quel est le nom de ce film ?",
-            "response": "Interstellar"
-          },
-          {
-            "statement": "Quel est le nom de ce film ?",
-            "response": "Django Unchained"
-          }
-        ]
+        "name": "Quiz spécial tout modifié"
       }
   auth: inherit
 

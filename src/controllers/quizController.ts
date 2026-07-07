@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { QuizService } from "../services/quizService";
 import { Quiz } from "../entities/Quiz";
-import { QuizPostDto } from "../dtos/Quiz";
+import { QuizPostDto, QuizPutDto } from "../dtos/Quiz";
 import { Question } from "../entities/Question";
 
 export class QuizController {
@@ -39,7 +39,23 @@ export class QuizController {
   };
 
   update = async (req: Request, res: Response) => {
-    //
+    const putData = req.body as QuizPutDto;
+    const quizId = Number(req.params.id);
+    if (!quizId) return res.status(400).send();
+
+    const quiz = await this.quizService.getQuizWithInclude(quizId);
+
+    if (!quiz)
+      return res
+        .status(404)
+        .send({ message: `Quiz not found with this id: ${quizId}` });
+
+    if (quiz.createdBy.id != req.user!.id)
+      return res.status(403).send({ message: "Forbidden" });
+
+    await Quiz.update({ id: quizId }, { name: putData.name });
+
+    return res.status(204).send();
   };
 
   delete = async (req: Request, res: Response) => {

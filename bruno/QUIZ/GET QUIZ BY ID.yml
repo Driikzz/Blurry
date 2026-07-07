@@ -8,7 +8,7 @@ http:
   url: "{{baseUrl}}/quiz/:id"
   params:
     - name: id
-      value: "1"
+      value: "4"
       type: path
   auth: inherit
 
