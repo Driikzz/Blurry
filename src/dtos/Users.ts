@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, MaxLength, MinLength } from "class-validator";
+import { BaseValidator } from "./BaseValidator";
 
 export interface UserDto {
   id: number;
@@ -21,7 +22,7 @@ export interface UserLoginDto {
 
 // Class validator
 
-export class UserCreateValidator {
+export class UserCreateValidator extends BaseValidator {
   @IsNotEmpty()
   @MaxLength(30)
   name!: string;
@@ -34,7 +35,7 @@ export class UserCreateValidator {
   password!: string;
 }
 
-export class UserUpdateValidator {
+export class UserUpdateValidator extends BaseValidator {
   @MaxLength(30)
   name!: string;
 
@@ -45,7 +46,7 @@ export class UserUpdateValidator {
   password!: string;
 }
 
-export class UserLoginValidator {
+export class UserLoginValidator extends BaseValidator {
   @IsEmail()
   email!: string;
 

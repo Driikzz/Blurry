@@ -1,89 +1,28 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  UserCreateValidator,
-  UserLoginValidator,
-  UserUpdateValidator,
-} from "../dtos/Users";
 import { validate } from "class-validator";
+import { BaseValidator } from "../dtos/BaseValidator";
 
-export const userCreateValidator = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    if (req.body === undefined || req.body === null) {
-      return res.status(400).json({ error: "Request body is missing" });
+export function validatorTest<T extends BaseValidator>(
+  ValidatorClass: new () => T
+) {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const instance = new ValidatorClass();
+    try {
+      if (req.body === undefined || req.body === null) {
+        return res.status(400).json({ error: "Request body is missing" });
+      }
+
+      Object.assign(instance, req.body);
+
+      const errors = await validate(instance);
+
+      if (errors.length > 0) {
+        return res.status(400).json({ errors });
+      }
+
+      next();
+    } catch (error) {
+      next(error);
     }
-
-    const userCreateValidator = new UserCreateValidator();
-
-    userCreateValidator.name = req.body.name;
-    userCreateValidator.email = req.body.email;
-    userCreateValidator.password = req.body.password;
-
-    const errors = await validate(userCreateValidator);
-
-    if (errors.length > 0) {
-      return res.status(400).json({ errors });
-    }
-
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const userUpdateValidator = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    if (req.body === undefined || req.body === null) {
-      return res.status(400).json({ error: "Request body is missing" });
-    }
-
-    const userUpdateValidator = new UserUpdateValidator();
-
-    userUpdateValidator.name = req.body.name;
-    userUpdateValidator.email = req.body.email;
-    userUpdateValidator.password = req.body.password;
-
-    const errors = await validate(userUpdateValidator);
-
-    if (errors.length > 0) {
-      return res.status(400).json({ errors });
-    }
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const userLoginValidator = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    if (req.body === undefined || req.body === null) {
-      return res.status(400).json({ error: "Request body is missing" });
-    }
-
-    const userLoginValidator = new UserLoginValidator();
-
-    userLoginValidator.email = req.body.email;
-    userLoginValidator.password = req.body.password;
-
-    const errors = await validate(userLoginValidator);
-
-    if (errors.length > 0) {
-      return res.status(400).json({ errors });
-    }
-
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
+  };
+}
