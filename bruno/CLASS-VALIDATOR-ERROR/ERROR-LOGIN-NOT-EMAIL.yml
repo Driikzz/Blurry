@@ -1,7 +1,7 @@
 info:
-  name: LOGIN
+  name: ERROR-LOGIN-NOT-EMAIL
   type: http
-  seq: 2
+  seq: 1
 
 http:
   method: POST
@@ -10,9 +10,8 @@ http:
     type: json
     data: |-
       {
-        "name":"Rémi1",
-        "email":"remisalles1",
-        "password":"aaaaaa"
+        "email" : "test",
+        "password" : "jesuisfortdefou"
       }
   auth: inherit
 

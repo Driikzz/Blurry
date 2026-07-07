@@ -1,11 +1,11 @@
 info:
-  name: LOGIN
+  name: ERROR-REGISTER-NOT-EMAIL
   type: http
   seq: 2
 
 http:
   method: POST
-  url: "{{baseUrl}}/auth/login"
+  url: "{{baseUrl}}/auth/register"
   body:
     type: json
     data: |-

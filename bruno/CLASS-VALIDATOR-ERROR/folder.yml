@@ -1,0 +1,7 @@
+info:
+  name: CLASS-VALIDATOR-ERROR
+  type: folder
+  seq: 4
+
+request:
+  auth: inherit

@@ -5,14 +5,14 @@ info:
 
 http:
   method: PUT
-  url: "{{baseUrl}}/users/1"
+  url: "{{baseUrl}}/users/2"
   body:
     type: json
     data: |-
       {
-        "name":"Rémi1",
+        "name":"Rémi12",
         "email":"remisalles@gmail.com",
-        "password":"a"
+        "password":"aaaaaa"
       }
   auth: inherit
 
