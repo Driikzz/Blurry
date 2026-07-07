@@ -1,4 +1,17 @@
-import { QuestionDto, QuestionPostDto } from "./Question";
+import {
+  ArrayMinSize,
+  IsArray,
+  IsNotEmpty,
+  MinLength,
+  ValidateNested,
+} from "class-validator";
+import { Type } from "class-transformer";
+import { BaseValidator } from "./BaseValidator";
+import {
+  QuestionCreateValidator,
+  QuestionDto,
+  QuestionPostDto,
+} from "./Question";
 import { UserDto } from "./Users";
 
 export interface QuizDto {
@@ -17,4 +30,18 @@ export interface QuizPostDto {
 
 export interface QuizPutDto {
   name: string;
+}
+
+// Class validator
+
+export class QuizCreateValidator extends BaseValidator {
+  @IsNotEmpty()
+  @MinLength(3)
+  name!: string;
+
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => QuestionCreateValidator)
+  questions!: QuestionPostDto[];
 }

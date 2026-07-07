@@ -7,6 +7,7 @@ COPY package-lock.json package-lock.json
 RUN npm i
 
 COPY tsconfig.json tsconfig.json
+COPY nodemon.json nodemon.json
 COPY src src
 
 FROM base AS dev

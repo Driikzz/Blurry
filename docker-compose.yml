@@ -26,6 +26,7 @@ services:
     volumes:
       - ./src:/app/src
       - ./tsconfig.json:/app/tsconfig.json
+      - ./nodemon.json:/app/nodemon.json
     ports:
       - 3000:3000
     depends_on:

@@ -8,13 +8,13 @@ http:
   url: "{{baseUrl}}/quiz/:id"
   params:
     - name: id
-      value: "4"
+      value: "1"
       type: path
   body:
     type: json
     data: |-
       {
-        "name": "Quiz spécial tout modifié"
+        
       }
   auth: inherit
 

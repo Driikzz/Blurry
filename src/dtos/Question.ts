@@ -1,3 +1,6 @@
+import { IsNotEmpty, MinLength } from "class-validator";
+import { BaseValidator } from "./BaseValidator";
+
 export interface QuestionDto {
   id: number;
   statement: string;
@@ -7,4 +10,16 @@ export interface QuestionDto {
 export interface QuestionPostDto {
   statement: string;
   response: string;
+}
+
+// Class validator
+
+export class QuestionCreateValidator extends BaseValidator {
+  @IsNotEmpty()
+  @MinLength(3)
+  statement!: string;
+
+  @IsNotEmpty()
+  @MinLength(1)
+  response!: string;
 }
