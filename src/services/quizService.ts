@@ -1,4 +1,5 @@
-import { QuizPostDto } from "../dtos/Quiz";
+import { PaginatedResult } from "../dtos/PaginatedResults";
+import { QuizDto, QuizPostDto } from "../dtos/Quiz";
 import { Question } from "../entities/Question";
 import { Quiz } from "../entities/Quiz";
 import { User } from "../entities/User";
@@ -21,6 +22,21 @@ export class QuizService {
 
     if (!quiz) return null;
     return quiz.toQuizDto();
+  }
+
+  async getAllQuizWithInclude(): Promise<PaginatedResult<QuizDto>> {
+    const [quizz, total]: [Quiz[], number] = await Quiz.findAndCount({
+      relations: {
+        questions: true,
+        createdBy: true,
+      },
+    });
+
+    return {
+      totalResult: total,
+      page: 0,
+      results: quizz.map((quiz) => quiz.toQuizDto()),
+    };
   }
 
   async createQuiz(postData: QuizPostDto, user: User) {

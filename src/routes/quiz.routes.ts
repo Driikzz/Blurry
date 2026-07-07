@@ -8,7 +8,9 @@ const controller = new QuizController();
 router.get("/:id", requireConnected, (req: Request, res: Response) =>
   controller.getById(req, res)
 );
+
 router.get("/", (req: Request, res: Response) => controller.getAll(req, res));
+
 router.post("/", requireConnected, (req: Request, res: Response) =>
   controller.create(req, res)
 );

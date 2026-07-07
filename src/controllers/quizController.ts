@@ -12,7 +12,9 @@ export class QuizController {
   }
 
   getAll = async (req: Request, res: Response) => {
-    //
+    const quiz = await this.quizService.getAllQuizWithInclude();
+
+    return res.status(200).json(quiz);
   };
 
   getById = async (req: Request, res: Response) => {
