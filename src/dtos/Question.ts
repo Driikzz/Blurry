@@ -1,4 +1,4 @@
-import { IsNotEmpty, MinLength } from "class-validator";
+import { IsArray, IsNotEmpty, MinLength } from "class-validator";
 import { BaseValidator } from "./BaseValidator";
 
 export interface QuestionDto {
@@ -12,9 +12,24 @@ export interface QuestionPostDto {
   response: string;
 }
 
+export interface QuestionPutDto {
+  statement: string;
+  response: string;
+}
+
 // Class validator
 
 export class QuestionCreateValidator extends BaseValidator {
+  @IsNotEmpty()
+  @MinLength(3)
+  statement!: string;
+
+  @IsNotEmpty()
+  @MinLength(1)
+  response!: string;
+}
+
+export class QuestionUpdateValidator extends BaseValidator {
   @IsNotEmpty()
   @MinLength(3)
   statement!: string;

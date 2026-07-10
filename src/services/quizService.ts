@@ -9,25 +9,27 @@ export class QuizService {
     return await Quiz.findOneBy({ id: id });
   }
 
-  async getQuizWithInclude(id: number) {
+  async getQuizWithInclude(id: number, isQuestionsInclude: boolean = false) {
     const quiz = await Quiz.findOne({
       where: {
         id: id,
       },
       relations: {
         createdBy: true,
-        questions: true,
+        questions: isQuestionsInclude,
       },
     });
 
     if (!quiz) return null;
-    return quiz.toQuizDto();
+    return quiz;
   }
 
-  async getAllQuizWithInclude(): Promise<PaginatedResult<QuizDto>> {
+  async getAllQuizWithInclude(
+    isQuestionsInclude: boolean = false
+  ): Promise<PaginatedResult<QuizDto>> {
     const [quizz, total]: [Quiz[], number] = await Quiz.findAndCount({
       relations: {
-        questions: true,
+        questions: isQuestionsInclude,
         createdBy: true,
       },
     });

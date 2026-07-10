@@ -9,6 +9,7 @@ const userRouter = require("./routes/users.routes");
 const gamesRouter = require("./routes/games.routes");
 const quizRouter = require("./routes/quiz.routes");
 const authRouter = require("./routes/auth.routes");
+const questionsRouter = require("./routes/questions.routes");
 require("dotenv").config();
 
 async function main() {
@@ -26,6 +27,7 @@ async function main() {
   app.use("/games", gamesRouter);
   app.use("/quiz", quizRouter);
   app.use("/auth", authRouter);
+  app.use("/questions", questionsRouter);
 
   app.use((req, res) => {
     res.status(404).json({ message: "Route not found" });

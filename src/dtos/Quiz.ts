@@ -20,7 +20,7 @@ export interface QuizDto {
   createdAt: Date;
   updatedAt: Date;
   createdBy: UserDto;
-  questions: QuestionDto[];
+  questions?: QuestionDto[];
 }
 
 export interface QuizPostDto {

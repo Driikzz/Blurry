@@ -39,7 +39,7 @@ export class Quiz extends BaseEntity {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       createdBy: this.createdBy.toUserDto(),
-      questions: this.questions.map((q) => q.toQuestionDto()),
+      questions: this.questions?.map((q) => q.toQuestionDto()),
     };
   }
 }

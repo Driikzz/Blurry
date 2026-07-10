@@ -1,0 +1,26 @@
+info:
+  name: ADD QUESTION TO A QUIZ
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/questions/:id"
+  params:
+    - name: id
+      value: "1"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "statement": "Question ajoutés",
+        "response": "Réponse de la question ajoutée"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

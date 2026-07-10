@@ -21,14 +21,14 @@ export class QuizController {
     const quizId = Number(req.params.id);
     if (!quizId) return res.status(400).send();
 
-    const quiz = await this.quizService.getQuizWithInclude(quizId);
+    const quiz = await this.quizService.getQuizWithInclude(quizId, true);
 
     if (!quiz)
       return res
         .status(404)
         .send({ message: `Quiz not found with this id: ${quizId}` });
 
-    return res.status(200).json(quiz);
+    return res.status(200).json(quiz.toQuizDto());
   };
 
   create = async (req: Request, res: Response) => {
