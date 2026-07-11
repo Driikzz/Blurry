@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { GameService } from "../services/gameService";
-import { GameNotFoundException } from "../exceptions/GameNotFoundException";
+import { GamePostDto, GamePutDto } from "../dtos/Games";
 
 export class GameController {
   gameService: GameService;
@@ -9,43 +9,69 @@ export class GameController {
     this.gameService = new GameService();
   }
 
-  getAll = async (req: Request, res: Response) => {
-    try {
-      const result = await this.gameService.getAllGames();
-      return res.status(200).json(result);
-    } catch (error) {
-      return res.status(500).json({
-        message: "Internal server error",
-      });
-    }
-  };
+  async getAll(req: Request, res: Response) {
+    const games = await this.gameService.getAllQuizWithInclude();
 
-  getById = async (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+    return res.status(200).json(games);
+  }
 
-    try {
-      const result = await this.gameService.getGameByID(id);
-      return res.status(200).json(result);
-    } catch (error) {
-      if (error instanceof GameNotFoundException) {
-        return res.status(404).json({ message: error.message });
-      }
+  async getById(req: Request, res: Response) {
+    const gameId = Number(req.params.id);
+    if (!gameId) return res.status(400).send();
 
-      return res.status(500).json({
-        message: "Internal server error",
-      });
-    }
-  };
+    const game = await this.gameService.getGameWithInclude(gameId);
 
-  create = (req: Request, res: Response) => {
-    // ...
-  };
+    if (!game)
+      return res
+        .status(404)
+        .send({ message: `Game not found with this id: ${gameId}` });
 
-  update = (req: Request, res: Response) => {
-    // ...
-  };
+    return res.status(200).json(game.toGameDto());
+  }
 
-  delete = (req: Request, res: Response) => {
-    // ...
-  };
+  async create(req: Request, res: Response) {
+    const postData = req.body as GamePostDto;
+
+    await this.gameService.createGame(postData, req.user!);
+    return res.status(201).send();
+  }
+
+  async update(req: Request, res: Response) {
+    const putData = req.body as GamePutDto;
+    const gameId = Number(req.params.id);
+    if (!gameId) return res.status(400).send();
+
+    const game = await this.gameService.getGameWithInclude(gameId);
+
+    if (!game)
+      return res
+        .status(404)
+        .send({ message: `Game not found with this id: ${gameId}` });
+
+    if (game.createdBy.id != req.user!.id)
+      return res.status(403).send({ message: "Forbidden" });
+
+    await this.gameService.updateGame(game, putData);
+
+    return res.status(204).send();
+  }
+
+  async delete(req: Request, res: Response) {
+    const gameId = Number(req.params.id);
+    if (!gameId) return res.status(400).send();
+
+    const game = await this.gameService.getGameWithInclude(gameId);
+
+    if (!game)
+      return res
+        .status(404)
+        .send({ message: `Game not found with this id: ${gameId}` });
+
+    if (game.createdBy.id != req.user!.id)
+      return res.status(403).send({ message: "Forbidden" });
+
+    await this.gameService.deleteGame(game);
+
+    return res.status(204).send();
+  }
 }

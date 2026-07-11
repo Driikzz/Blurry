@@ -11,6 +11,7 @@ import {
 import { User } from "./User";
 import { Question } from "./Question";
 import { QuizDto } from "../dtos/Quiz";
+import { Game } from "./Game";
 
 @Entity()
 export class Quiz extends BaseEntity {
@@ -31,6 +32,9 @@ export class Quiz extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
+  @OneToMany(() => Game, (game) => game.quiz, { cascade: false })
+  games!: Game[];
 
   toQuizDto(): QuizDto {
     return {

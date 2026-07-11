@@ -12,6 +12,8 @@ export function validatorTest<T extends BaseValidator>(
         return res.status(400).json({ error: "Request body is missing" });
       }
 
+      // plain to instance permet de desierialiser les object en profondeurs exemple relation:
+      // QuizCreateValidator
       const instance = plainToInstance(ValidatorClass, req.body);
 
       const errors = await validate(instance);

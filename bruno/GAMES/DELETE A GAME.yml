@@ -1,10 +1,10 @@
 info:
-  name: GET GAME BY ID
+  name: DELETE A GAME
   type: http
-  seq: 1
+  seq: 5
 
 http:
-  method: GET
+  method: DELETE
   url: "{{baseUrl}}/games/:id"
   params:
     - name: id

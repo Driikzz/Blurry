@@ -1,18 +1,18 @@
 info:
-  name: REGISTER
+  name: CREATE A GAME
   type: http
-  seq: 1
+  seq: 3
 
 http:
   method: POST
-  url: "{{baseUrl}}/auth/register"
+  url: "{{baseUrl}}/games"
   body:
     type: json
     data: |-
       {
-        "email" : "test2@gmail.com",
-        "password" : "jesuisfortdefou",
-        "name": "Rémi 2"
+        "name": "Quiz sur les séries",
+        "userIds": [2],
+        "quizId": 5
       }
   auth: inherit
 
