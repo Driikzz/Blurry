@@ -4,11 +4,13 @@ import { BaseValidator } from "./BaseValidator";
 export interface QuestionDto {
   id: number;
   statement: string;
+  picture: string;
   response: string;
 }
 
 export interface QuestionPostDto {
   statement: string;
+  picture: string;
   response: string;
 }
 
