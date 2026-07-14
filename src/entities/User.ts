@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import { Quiz } from "./Quiz";
 import { UserDto } from "../dtos/Users";
+import { GameRoundAnswer } from "./GameRoundAswer";
 
 @Entity()
 export class User extends BaseEntity {
@@ -26,6 +27,11 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Quiz, (quiz) => quiz.createdBy)
   quiz!: Quiz[];
+
+  @OneToMany(() => GameRoundAnswer, (gameRoundAnswer) => gameRoundAnswer.user, {
+    cascade: true,
+  })
+  gameRoundAnswers!: GameRoundAnswer[];
 
   @CreateDateColumn()
   createdAt!: Date;

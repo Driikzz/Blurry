@@ -11,8 +11,8 @@ http:
     data: |-
       {
         "name": "Quiz sur les séries",
-        "userIds": [2],
-        "quizId": 5
+        "userIds": [2, 1],
+        "quizId": 6
       }
   auth: inherit
 

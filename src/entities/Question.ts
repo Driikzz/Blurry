@@ -3,10 +3,12 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Quiz } from "./Quiz";
 import { QuestionDto } from "../dtos/Question";
+import { GameRound } from "./GameRound";
 
 @Entity()
 export class Question extends BaseEntity {
@@ -24,6 +26,11 @@ export class Question extends BaseEntity {
 
   @ManyToOne(() => Quiz, (quiz) => quiz.questions, { onDelete: "CASCADE" })
   quiz!: Quiz;
+
+  @OneToMany(() => GameRound, (gameRound) => gameRound.question, {
+    cascade: true,
+  })
+  gameRounds!: GameRound[];
 
   toQuestionDto(): QuestionDto {
     return {

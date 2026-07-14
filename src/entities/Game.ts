@@ -8,10 +8,12 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
 import { User } from "./User";
 import { GameDto } from "../dtos/Games";
 import { Quiz } from "./Quiz";
+import { GameRound } from "./GameRound";
 
 @Entity()
 export class Game extends BaseEntity {
@@ -37,6 +39,18 @@ export class Game extends BaseEntity {
   @UpdateDateColumn()
   updatedAt!: Date;
 
+  @Column()
+  currentRound!: number;
+
+  @Column()
+  status!: GameStatus;
+
+  @ManyToOne(() => User, (user) => user.quiz)
+  currentPlayer?: User;
+
+  @OneToMany(() => GameRound, (gameRound) => gameRound.game, { cascade: true })
+  gameRounds!: GameRound[];
+
   toGameDto(): GameDto {
     return {
       id: this.id,
@@ -48,4 +62,10 @@ export class Game extends BaseEntity {
       createdBy: this.createdBy,
     };
   }
+}
+
+export enum GameStatus {
+  WAITING = 0,
+  IN_PROGRESS,
+  FINISHED,
 }

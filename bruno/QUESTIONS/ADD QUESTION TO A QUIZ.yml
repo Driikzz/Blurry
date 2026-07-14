@@ -18,12 +18,12 @@ http:
         value: Quel est le nom de ce film
       - name: response
         type: text
-        value: Dune
+        value: Le silence des agneaux
       - name: file
         type: file
         value:
-          - Images\dune.webp
-        contentType: image/webp
+          - Images\silence_of_the_lambs_0.jpg
+        contentType: image/jpeg
   auth: inherit
 
 settings:

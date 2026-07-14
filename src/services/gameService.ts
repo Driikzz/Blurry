@@ -1,7 +1,7 @@
 import { In } from "typeorm";
 import { GameDto, GamePostDto, GamePutDto } from "../dtos/Games";
 import { PaginatedResult } from "../dtos/PaginatedResults";
-import { Game } from "../entities/Game";
+import { Game, GameStatus } from "../entities/Game";
 import { Quiz } from "../entities/Quiz";
 import { User } from "../entities/User";
 import { GameNotFoundException } from "../exceptions/GameNotFoundException";
@@ -58,6 +58,9 @@ export class GameService {
     newGame.createdBy = user;
     newGame.users = users;
     newGame.quiz = quiz;
+    newGame.currentRound = 1;
+    newGame.status = GameStatus.WAITING;
+    // here we do not set current player util the game begins
 
     await newGame.save();
   }
