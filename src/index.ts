@@ -11,6 +11,7 @@ const quizRouter = require("./routes/quiz.routes");
 const authRouter = require("./routes/auth.routes");
 const questionsRouter = require("./routes/questions.routes");
 require("dotenv").config();
+import path from "path";
 
 async function main() {
   await AppDataSource.initialize();
@@ -22,6 +23,8 @@ async function main() {
   app.get("/health", (request: Request, response: Response) => {
     response.status(200).json({ status: "ok" });
   });
+
+  app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
   app.use("/users", userRouter);
   app.use("/games", gamesRouter);

@@ -1,5 +1,6 @@
 import { PaginatedResult } from "../dtos/PaginatedResults";
 import { QuizDto, QuizPostDto } from "../dtos/Quiz";
+import { Media } from "../entities/Media";
 import { Question } from "../entities/Question";
 import { Quiz } from "../entities/Quiz";
 import { User } from "../entities/User";
@@ -41,7 +42,9 @@ export class QuizService {
     };
   }
 
-  async createQuiz(postData: QuizPostDto, user: User) {
+  async createQuiz(postData: QuizPostDto, user: User, media: Media) {
+    console.log("postData", postData);
+    console.log("media", media);
     const newQuiz = new Quiz();
     newQuiz.name = postData.name;
     newQuiz.createdBy = user;
@@ -49,6 +52,7 @@ export class QuizService {
       const question = new Question();
       question.statement = q.statement;
       question.response = q.response;
+      question.picture = media.path;
       return question;
     });
 

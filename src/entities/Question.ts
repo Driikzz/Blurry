@@ -13,6 +13,9 @@ export class Question extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column()
+  picture!: string;
+
   @Column({ nullable: false })
   statement!: string;
 
@@ -26,6 +29,7 @@ export class Question extends BaseEntity {
     return {
       id: this.id,
       statement: this.statement,
+      picture: this.picture,
       response: this.response,
     };
   }
