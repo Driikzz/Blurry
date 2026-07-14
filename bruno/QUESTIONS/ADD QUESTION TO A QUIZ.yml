@@ -8,15 +8,22 @@ http:
   url: "{{baseUrl}}/questions/:id"
   params:
     - name: id
-      value: "1"
+      value: "6"
       type: path
   body:
-    type: json
-    data: |-
-      {
-        "statement": "Question ajoutés",
-        "response": "Réponse de la question ajoutée"
-      }
+    type: multipart-form
+    data:
+      - name: statement
+        type: text
+        value: Quel est le nom de ce film
+      - name: response
+        type: text
+        value: Dune
+      - name: file
+        type: file
+        value:
+          - Images\dune.webp
+        contentType: image/webp
   auth: inherit
 
 settings:

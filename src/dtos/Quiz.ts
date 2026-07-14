@@ -25,7 +25,6 @@ export interface QuizDto {
 
 export interface QuizPostDto {
   name: string;
-  questions: QuestionPostDto[];
 }
 
 export interface QuizPutDto {
@@ -38,10 +37,4 @@ export class QuizCreateValidator extends BaseValidator {
   @IsNotEmpty()
   @MinLength(3)
   name!: string;
-
-  @IsArray()
-  @ArrayMinSize(1)
-  @ValidateNested({ each: true })
-  @Type(() => QuestionCreateValidator)
-  questions!: QuestionPostDto[];
 }

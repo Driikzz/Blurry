@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import { QuizService } from "../services/quizService";
 import { Quiz } from "../entities/Quiz";
 import { QuizPostDto, QuizPutDto } from "../dtos/Quiz";
-import { Question } from "../entities/Question";
-import { Media } from "../entities/Media";
 
 export class QuizController {
   quizService: QuizService;
@@ -35,28 +33,7 @@ export class QuizController {
   create = async (req: Request, res: Response) => {
     const postData = req.body as QuizPostDto;
 
-    console.log("postData", postData);
-
-    if (!req.file) {
-      return res.status(400).json({ message: "File is required" });
-    }
-
-    const newMedia = new Media();
-    newMedia.name = req.file.originalname;
-    newMedia.size = req.file.size;
-    newMedia.path = req.file.path;
-
-    if (req.body.questions && typeof req.body.questions === "string") {
-      postData.questions = JSON.parse(req.body.questions);
-    } else {
-      return res.status(400).json({ message: "Questions are required" });
-    }
-
-    const response = await this.quizService.createQuiz(
-      postData,
-      req.user!,
-      newMedia
-    );
+    const response = await this.quizService.createQuiz(postData, req.user!);
     return res.status(201).json(response);
   };
 

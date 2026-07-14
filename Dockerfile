@@ -9,6 +9,7 @@ RUN npm i
 COPY tsconfig.json tsconfig.json
 COPY nodemon.json nodemon.json
 COPY src src
+RUN mkdir -p uploads
 
 FROM base AS dev
 

@@ -1,4 +1,5 @@
 import { QuestionPostDto, QuestionPutDto } from "../dtos/Question";
+import { Media } from "../entities/Media";
 import { Question } from "../entities/Question";
 import { Quiz } from "../entities/Quiz";
 
@@ -19,11 +20,12 @@ export class QuestionService {
     return question;
   }
 
-  async AddQuestionToQuiz(quiz: Quiz, postData: QuestionPostDto) {
+  async AddQuestionToQuiz(quiz: Quiz, postData: QuestionPostDto, media: Media) {
     const newQuestion = new Question();
     newQuestion.statement = postData.statement;
     newQuestion.response = postData.response;
     newQuestion.quiz = quiz;
+    newQuestion.picture = media.path;
 
     await newQuestion.save();
   }

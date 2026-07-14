@@ -7,23 +7,11 @@ http:
   method: POST
   url: "{{baseUrl}}/quiz"
   body:
-    type: multipart-form
-    data:
-      - name: name
-        type: text
-        value: Quiz spécial cinéma
-
-      - name: questions
-        type: text
-        value: >-
-          [{"statement":"Quel est le nom de ce film ?","response":"Interstellar"},{"statement":"Quel est le nom de ce film ?","response":"Django Unchained"},{"statement":"Quel est le nom de cette série ?","response":"Breaking Bad"}]
-
-      - name: file
-        type: file
-        value:
-          - C:\Users\remis\Downloads\1160964458-1-600x600.jpg.webp
-        contentType: image/webp
-
+    type: json
+    data: |-
+      {
+        "name": "Quiz spécial cinéma"
+      }
   auth: inherit
 
 settings:

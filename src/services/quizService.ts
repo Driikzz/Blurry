@@ -42,19 +42,10 @@ export class QuizService {
     };
   }
 
-  async createQuiz(postData: QuizPostDto, user: User, media: Media) {
-    console.log("postData", postData);
-    console.log("media", media);
+  async createQuiz(postData: QuizPostDto, user: User) {
     const newQuiz = new Quiz();
     newQuiz.name = postData.name;
     newQuiz.createdBy = user;
-    newQuiz.questions = postData.questions.map((q) => {
-      const question = new Question();
-      question.statement = q.statement;
-      question.response = q.response;
-      question.picture = media.path;
-      return question;
-    });
 
     await newQuiz.save();
     return newQuiz.toQuizDto();

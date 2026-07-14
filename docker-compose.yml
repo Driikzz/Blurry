@@ -29,6 +29,7 @@ services:
       - ./src:/app/src
       - ./tsconfig.json:/app/tsconfig.json
       - ./nodemon.json:/app/nodemon.json
+      - ./uploads:/app/uploads
     ports:
       - 3000:3000
     depends_on:
