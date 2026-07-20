@@ -10,9 +10,9 @@ http:
     type: json
     data: |-
       {
-        "name": "Quiz sur les séries",
+        "name": "Quiz sur le cinéma",
         "userIds": [2, 1],
-        "quizId": 6
+        "quizId": 1
       }
   auth: inherit
 

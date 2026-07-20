@@ -60,6 +60,10 @@ export class Game extends BaseEntity {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       createdBy: this.createdBy,
+      currentRound: this.currentRound,
+      status: this.status,
+      currentPlayer: this.currentPlayer,
+      gameRounds: this.gameRounds?.map((gr) => gr.toGameRoundDto()),
     };
   }
 }

@@ -8,15 +8,17 @@ http:
   url: "{{baseUrl}}/questions/:id"
   params:
     - name: id
-      value: "9"
+      value: "1"
       type: path
   body:
-    type: json
-    data: |-
-      {
-        "statement": "Question ajoutés modifié",
-        "response": "Réponse de la question ajoutée modifié"
-      }
+    type: multipart-form
+    data:
+      - name: statement
+        type: text
+        value: Quel est le nom de ce film (modifiéé) ?
+      - name: response
+        type: text
+        value: Le silence des agneaux
   auth: inherit
 
 settings:

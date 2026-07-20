@@ -9,6 +9,7 @@ import {
 import { Game } from "./Game";
 import { Question } from "./Question";
 import { GameRoundAnswer } from "./GameRoundAswer";
+import { GameRoundDto } from "../dtos/GameRounds";
 
 @Entity()
 export class GameRound extends BaseEntity {
@@ -32,4 +33,12 @@ export class GameRound extends BaseEntity {
 
   @Column()
   roundNumber!: number;
+
+  toGameRoundDto(): GameRoundDto {
+    return {
+      id: this.id,
+      question: this.question.toQuestionDto(),
+      roundNumber: this.roundNumber,
+    };
+  }
 }

@@ -16,6 +16,9 @@ export class GameService {
         quiz: {
           createdBy: true,
         },
+        gameRounds: {
+          gameRoundAnswers: true,
+        },
       },
     });
 
@@ -63,6 +66,13 @@ export class GameService {
     // here we do not set current player util the game begins
 
     await newGame.save();
+  }
+
+  async startGame(game: Game) {
+    game.currentRound = GameStatus.IN_PROGRESS;
+    game.currentPlayer = game.users[0];
+    await game.save();
+    return game;
   }
 
   async updateGame(game: Game, putData: GamePutDto) {

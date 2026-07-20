@@ -36,6 +36,24 @@ export class GameController {
     return res.status(201).send();
   }
 
+  async startGame(req: Request, res: Response) {
+    const gameId = Number(req.params.id);
+    if (!gameId) return res.status(400).send();
+
+    const game = await this.gameService.getGameWithInclude(gameId);
+
+    if (!game)
+      return res
+        .status(404)
+        .send({ message: `Game not found with this id: ${gameId}` });
+
+    if (game.createdBy.id != req.user!.id)
+      return res.status(403).send({ message: "Forbidden" });
+
+    const updatedGame = await this.gameService.startGame(game);
+    return res.status(200).json(updatedGame.toGameDto());
+  }
+
   async update(req: Request, res: Response) {
     const putData = req.body as GamePutDto;
     const gameId = Number(req.params.id);

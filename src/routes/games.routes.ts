@@ -17,6 +17,9 @@ router.post(
   validatorTest(GameCreateValidator),
   (req: Request, res: Response) => controller.create(req, res)
 );
+router.post("/start/:id", requireConnected, (req: Request, res: Response) =>
+  controller.startGame(req, res)
+);
 router.put(
   "/:id",
   requireConnected,

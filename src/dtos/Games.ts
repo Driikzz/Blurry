@@ -9,6 +9,8 @@ import {
 import { BaseValidator } from "./BaseValidator";
 import { UserDto } from "./Users";
 import { QuizDto } from "./Quiz";
+import { GameStatus } from "../entities/Game";
+import { GameRoundDto } from "./GameRounds";
 
 export interface GameDto {
   id: number;
@@ -18,6 +20,10 @@ export interface GameDto {
   createdAt: Date;
   updatedAt: Date;
   createdBy: UserDto;
+  currentRound: number;
+  status: GameStatus;
+  currentPlayer: UserDto | undefined;
+  gameRounds: GameRoundDto[];
 }
 
 export interface GamePostDto {
