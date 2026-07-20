@@ -3,9 +3,11 @@ import { WebSocketServer, WebSocket, RawData } from "ws";
 import { MessageFormat } from "../dtos/MessageFormat";
 import { GameService } from "./gameService";
 import { JoinGameDto } from "../dtos/Games";
+import { User } from "../entities/User";
 
 export interface ClientInformations {
   ws: WebSocket;
+  user: User;
   connectedAt: Date;
   ipAddress: string | undefined;
 }
@@ -40,9 +42,12 @@ export class WebSocketService {
       .update(new Date().toString())
       .digest("hex");
 
+    const user = (request as any).user as User;
+
     // Store client with metadata
     this.clients.set(clientId, {
       ws,
+      user,
       connectedAt: new Date(),
       ipAddress: request.socket.remoteAddress,
     });
@@ -56,7 +61,7 @@ export class WebSocketService {
       })
     );
 
-    this.handleIncommingMessage(ws, request, clientId);
+    this.handleIncommingMessage(ws, request, clientId, user);
     this.handleConnectionClose(ws, request, clientId);
     this.handleErrors(ws, request, clientId);
   }
@@ -64,7 +69,8 @@ export class WebSocketService {
   handleIncommingMessage(
     ws: WebSocket,
     request: IncomingMessage,
-    clientId: string
+    clientId: string,
+    user: User
   ) {
     ws.on("message", (data) => {
       const message = this.validateRecieveMessage(ws, data);

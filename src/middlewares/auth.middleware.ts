@@ -3,6 +3,20 @@ import { User } from "../entities/User";
 
 const jwt = require("jsonwebtoken");
 
+export const getUserFromToken = (token: string): Promise<User | null> => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(
+      token,
+      process.env.JWT_SECRET_KEY,
+      async (err: any, decoded: any) => {
+        if (err) return reject(err);
+
+        resolve(await User.findOneBy({ id: decoded.userId }));
+      }
+    );
+  });
+};
+
 export const requireConnected = async (
   req: Request,
   res: Response,
@@ -13,17 +27,10 @@ export const requireConnected = async (
     return res.status(401).send({ message: "Unauthorized access" });
   }
 
-  jwt.verify(
-    token,
-    process.env.JWT_SECRET_KEY,
-    async (err: any, decoded: any) => {
-      if (err) {
-        return res.status(401).send({ message: "Unauthorized access" });
-      }
-
-      req.user = await User.findOneBy({ id: decoded.userId });
-
-      next();
-    }
-  );
+  try {
+    req.user = await getUserFromToken(token);
+    next();
+  } catch (error) {
+    return res.status(401).send({ message: "Unauthorized access" });
+  }
 };

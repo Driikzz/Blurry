@@ -15,6 +15,17 @@ http:
       }
   auth: inherit
 
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const setCookie = res.getHeader("set-cookie");
+        const cookieHeader = Array.isArray(setCookie) ? setCookie[0] : setCookie;
+        const match = cookieHeader ? /token=([^;]+)/.exec(cookieHeader) : null;
+        if (match) {
+          bru.setEnvVar("token", match[1]);
+        }
+
 settings:
   encodeUrl: true
   timeout: 0

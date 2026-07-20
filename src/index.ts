@@ -13,9 +13,26 @@ const questionsRouter = require("./routes/questions.routes");
 const mediasRouter = require("./routes/medias.routes");
 require("dotenv").config();
 import path from "path";
-import { createServer } from "http";
+import { createServer, IncomingMessage } from "http";
 import { WebSocketServer } from "ws";
 import { WebSocketService } from "./services/WebSocketService";
+import { getUserFromToken } from "./middlewares/auth.middleware";
+
+function parseCookies(header?: string): Record<string, string> {
+  const cookies: Record<string, string> = {};
+  if (!header) return cookies;
+
+  header.split(";").forEach((pair) => {
+    const separatorIndex = pair.indexOf("=");
+    if (separatorIndex === -1) return;
+
+    const name = pair.slice(0, separatorIndex).trim();
+    const value = pair.slice(separatorIndex + 1).trim();
+    cookies[name] = decodeURIComponent(value);
+  });
+
+  return cookies;
+}
 
 async function main() {
   await AppDataSource.initialize();
@@ -42,10 +59,42 @@ async function main() {
   });
 
   const server = createServer(app);
-  const ws = new WebSocketServer({ server });
+  const ws = new WebSocketServer({ noServer: true });
 
   const wsService = new WebSocketService(ws);
   wsService.initialize();
+
+  server.on("upgrade", async (request: IncomingMessage, socket, head) => {
+    console.log("🚀 ~ main ~ request:", request);
+    const cookies = parseCookies(request.headers.cookie);
+    console.log("🚀 ~ main ~ cookies:", cookies);
+    const token = cookies.token;
+    console.log("🚀 ~ main ~ token:", token);
+
+    if (!token) {
+      socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n");
+      socket.destroy();
+      return;
+    }
+
+    try {
+      const user = await getUserFromToken(token);
+      if (!user) {
+        socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n");
+        socket.destroy();
+        return;
+      }
+
+      (request as any).user = user;
+
+      ws.handleUpgrade(request, socket, head, (websocket) => {
+        ws.emit("connection", websocket, request);
+      });
+    } catch (error) {
+      socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n");
+      socket.destroy();
+    }
+  });
 
   server
     .listen(3000, () => {
