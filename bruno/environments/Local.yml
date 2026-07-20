@@ -2,3 +2,5 @@ name: Local
 variables:
   - name: baseUrl
     value: http://localhost:3000
+  - name: baseWsUrl
+    value: ws://localhost:3000

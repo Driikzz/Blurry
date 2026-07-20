@@ -1,12 +1,14 @@
 import { In } from "typeorm";
-import { GameDto, GamePostDto, GamePutDto } from "../dtos/Games";
+import { GameDto, GamePostDto, GamePutDto, JoinGameDto } from "../dtos/Games";
 import { PaginatedResult } from "../dtos/PaginatedResults";
 import { Game, GameStatus } from "../entities/Game";
 import { Quiz } from "../entities/Quiz";
 import { User } from "../entities/User";
 import { GameNotFoundException } from "../exceptions/GameNotFoundException";
-import { GameRound } from "../entities/GameRound";
 import { GameRoundService } from "./gameRoundService";
+import { MessageFormat } from "../dtos/MessageFormat";
+import { WebSocket } from "ws";
+import { MessageType, WebSocketService } from "./WebSocketService";
 
 export class GameService {
   gameRoundService: GameRoundService;
@@ -110,5 +112,16 @@ export class GameService {
 
   async deleteGame(game: Game) {
     await game.remove();
+  }
+
+  // WebSocket
+  async joinRoom(ws: WebSocket, payload: MessageFormat<JoinGameDto>) {
+    if (!payload.payload.gameId || !payload.payload.userId) {
+      WebSocketService.sendError(ws, "wrong payload, bad request");
+      return;
+    }
+
+    const game = await this.getGameWithInclude(payload.payload.gameId);
+    WebSocketService.sendMessage(ws, game.toGameDto(), MessageType.JOIN_ROOM);
   }
 }

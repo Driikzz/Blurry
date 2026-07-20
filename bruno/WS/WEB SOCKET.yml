@@ -1,0 +1,23 @@
+info:
+  name: WEB SOCKET
+  type: websocket
+  seq: 1
+
+websocket:
+  url: "{{baseWsUrl}}"
+  message:
+    type: json
+    data: |-
+      {
+        "type": "join_room",
+        "payload": {
+          "gameId": 1,
+          "userId": 1
+        },
+        "sentAt": "2026-07-20T12:35:08.742Z"
+      }
+  auth: inherit
+
+settings:
+  timeout: 0
+  keepAliveInterval: 0

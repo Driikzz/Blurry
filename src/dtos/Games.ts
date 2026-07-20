@@ -38,6 +38,11 @@ export interface GamePutDto {
   quizId: number;
 }
 
+export interface JoinGameDto {
+  gameId: number;
+  userId: number;
+}
+
 // class validatior
 export class GameCreateValidator extends BaseValidator {
   @IsNotEmpty()

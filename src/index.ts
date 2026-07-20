@@ -13,6 +13,9 @@ const questionsRouter = require("./routes/questions.routes");
 const mediasRouter = require("./routes/medias.routes");
 require("dotenv").config();
 import path from "path";
+import { createServer } from "http";
+import { WebSocketServer } from "ws";
+import { WebSocketService } from "./services/WebSocketService";
 
 async function main() {
   await AppDataSource.initialize();
@@ -38,7 +41,13 @@ async function main() {
     res.status(404).json({ message: "Route not found" });
   });
 
-  app
+  const server = createServer(app);
+  const ws = new WebSocketServer({ server });
+
+  const wsService = new WebSocketService(ws);
+  wsService.initialize();
+
+  server
     .listen(3000, () => {
       console.log("Server running at PORT: ", 3000);
     })
