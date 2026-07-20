@@ -10,6 +10,7 @@ const gamesRouter = require("./routes/games.routes");
 const quizRouter = require("./routes/quiz.routes");
 const authRouter = require("./routes/auth.routes");
 const questionsRouter = require("./routes/questions.routes");
+const mediasRouter = require("./routes/medias.routes");
 require("dotenv").config();
 import path from "path";
 
@@ -31,6 +32,7 @@ async function main() {
   app.use("/quiz", quizRouter);
   app.use("/auth", authRouter);
   app.use("/questions", questionsRouter);
+  app.use("/medias", mediasRouter);
 
   app.use((req, res) => {
     res.status(404).json({ message: "Route not found" });

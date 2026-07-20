@@ -36,6 +36,7 @@ export class QuestionController {
     newMedia.name = req.file.originalname;
     newMedia.size = req.file.size;
     newMedia.path = req.file.path;
+    await newMedia.save();
 
     await this.questionService.AddQuestionToQuiz(quiz, postData, newMedia);
     return res.status(204).send();
@@ -58,15 +59,22 @@ export class QuestionController {
       return res.status(403).send({ message: "Forbidden" });
 
     let newMedia: Media | null = null;
+    let oldMedia: Media | null = null;
 
     if (req.file) {
+      oldMedia = await Media.findOne({ where: { path: question.picture } });
       newMedia = new Media();
       newMedia.name = req.file.originalname;
       newMedia.size = req.file.size;
       newMedia.path = req.file.path;
+      await newMedia.save();
     }
 
     await this.questionService.UpdateQuestion(question, putData, newMedia);
+
+    if (oldMedia) {
+      await oldMedia.remove();
+    }
 
     return res.status(204).send();
   }

@@ -2,12 +2,15 @@ import { Request, Response } from "express";
 import { GameService } from "../services/gameService";
 import { GamePostDto, GamePutDto } from "../dtos/Games";
 import { GameStatus } from "../entities/Game";
+import { ImageService } from "../services/ImageService";
 
 export class GameController {
   gameService: GameService;
+  imageService: ImageService;
 
   constructor() {
     this.gameService = new GameService();
+    this.imageService = new ImageService();
   }
 
   async getAll(req: Request, res: Response) {
@@ -97,5 +100,23 @@ export class GameController {
     await this.gameService.deleteGame(game);
 
     return res.status(204).send();
+  }
+
+  async testReturnBlurredImage(req: Request, res: Response) {
+    const imagePath = String(req.params.id);
+    const blurAmount = 10; // You can adjust the blur amount as needed
+
+    try {
+      const blurredImage = await this.imageService.returnBlurredImage(
+        imagePath,
+        blurAmount
+      );
+      res.set("Content-Type", "image/jpeg");
+      return res.status(200).send(blurredImage);
+    } catch (error) {
+      return res
+        .status(500)
+        .send({ message: "Error occurred while processing the image" });
+    }
   }
 }

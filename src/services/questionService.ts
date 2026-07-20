@@ -43,6 +43,11 @@ export class QuestionService {
   }
 
   async DeleteQuestion(question: Question) {
+    const media = await Media.findOne({ where: { path: question.picture } });
     await question.remove();
+
+    if (media) {
+      await media.remove();
+    }
   }
 }
