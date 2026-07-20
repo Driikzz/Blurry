@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { GameService } from "../services/gameService";
 import { GamePostDto, GamePutDto } from "../dtos/Games";
+import { GameStatus } from "../entities/Game";
 
 export class GameController {
   gameService: GameService;
@@ -50,7 +51,12 @@ export class GameController {
     if (game.createdBy.id != req.user!.id)
       return res.status(403).send({ message: "Forbidden" });
 
+    if (game.status != GameStatus.WAITING) {
+      return res.status(400).send({ message: "The game already started" });
+    }
+
     const updatedGame = await this.gameService.startGame(game);
+    console.log("🚀 ~ GameController ~ startGame ~ updatedGame:", updatedGame);
     return res.status(200).json(updatedGame.toGameDto());
   }
 

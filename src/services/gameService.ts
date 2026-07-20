@@ -5,8 +5,16 @@ import { Game, GameStatus } from "../entities/Game";
 import { Quiz } from "../entities/Quiz";
 import { User } from "../entities/User";
 import { GameNotFoundException } from "../exceptions/GameNotFoundException";
+import { GameRound } from "../entities/GameRound";
+import { GameRoundService } from "./gameRoundService";
 
 export class GameService {
+  gameRoundService: GameRoundService;
+
+  constructor() {
+    this.gameRoundService = new GameRoundService();
+  }
+
   async getGameWithInclude(id: number): Promise<Game> {
     const game: Game | null = await Game.findOne({
       where: { id: id },
@@ -15,8 +23,10 @@ export class GameService {
         users: true,
         quiz: {
           createdBy: true,
+          questions: true,
         },
         gameRounds: {
+          question: true,
           gameRoundAnswers: true,
         },
       },
@@ -69,9 +79,15 @@ export class GameService {
   }
 
   async startGame(game: Game) {
-    game.currentRound = GameStatus.IN_PROGRESS;
+    game.status = GameStatus.IN_PROGRESS;
     game.currentPlayer = game.users[0];
     await game.save();
+    const createdNewRound = await this.gameRoundService.createNewRound(
+      game,
+      game.quiz.questions[0]
+    );
+
+    game.gameRounds.push(createdNewRound);
     return game;
   }
 

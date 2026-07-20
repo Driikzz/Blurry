@@ -19,6 +19,10 @@ http:
       - name: response
         type: text
         value: Le silence des agneaux
+      - name: file
+        type: file
+        value:
+          - Images/tenet.jpg
   auth: inherit
 
 settings:
