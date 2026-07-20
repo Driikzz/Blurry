@@ -30,8 +30,15 @@ export class QuestionService {
     await newQuestion.save();
   }
 
-  async UpdateQuestion(question: Question, putData: QuestionPutDto) {
+  async UpdateQuestion(
+    question: Question,
+    putData: QuestionPutDto,
+    media: Media | null
+  ) {
     Object.assign(question, putData);
+    if (media) {
+      question.picture = media.path;
+    }
     await question.save();
   }
 

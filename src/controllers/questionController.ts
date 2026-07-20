@@ -14,7 +14,6 @@ export class QuestionController {
   }
 
   async AddQuestionToQuiz(req: Request, res: Response) {
-    console.log("🚀 ~ QuestionController ~ AddQuestionToQuiz ~ req:", req);
     const postData = req.body as QuestionPostDto;
     const quizId = Number(req.params.id);
     if (!quizId) return res.status(400).send();
@@ -58,7 +57,16 @@ export class QuestionController {
     if (question.quiz.createdBy.id != req.user!.id)
       return res.status(403).send({ message: "Forbidden" });
 
-    await this.questionService.UpdateQuestion(question, putData);
+    let newMedia: Media | null = null;
+
+    if (req.file) {
+      newMedia = new Media();
+      newMedia.name = req.file.originalname;
+      newMedia.size = req.file.size;
+      newMedia.path = req.file.path;
+    }
+
+    await this.questionService.UpdateQuestion(question, putData, newMedia);
 
     return res.status(204).send();
   }

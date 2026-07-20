@@ -46,6 +46,7 @@ router.post(
 router.put(
   "/:id",
   requireConnected,
+  upload.single("file"),
   validatorTest(QuestionUpdateValidator),
   (req: Request, res: Response) => controller.UpdateQuestion(req, res)
 );
