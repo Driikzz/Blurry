@@ -40,7 +40,6 @@ export interface GamePutDto {
 
 export interface JoinGameDto {
   gameId: number;
-  userId: number;
 }
 
 // class validatior

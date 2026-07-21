@@ -4,6 +4,7 @@ import { MessageFormat } from "../dtos/MessageFormat";
 import { GameService } from "./gameService";
 import { JoinGameDto } from "../dtos/Games";
 import { User } from "../entities/User";
+import { WebSocketRoomService } from "./WebSocketRoomService";
 
 export interface ClientInformations {
   ws: WebSocket;
@@ -22,12 +23,14 @@ export class WebSocketService {
   clients: Map<string, ClientInformations>;
   crypto: any;
   gameService: GameService;
+  roomService: WebSocketRoomService;
 
   constructor(webSocket: WebSocketServer) {
     this.ws = webSocket;
     this.clients = new Map<string, ClientInformations>();
     this.crypto = require("crypto");
     this.gameService = new GameService();
+    this.roomService = new WebSocketRoomService();
   }
 
   initialize() {
@@ -78,7 +81,11 @@ export class WebSocketService {
 
       switch (message.type) {
         case MessageType.JOIN_ROOM:
-          this.gameService.joinRoom(ws, message as MessageFormat<JoinGameDto>);
+          this.roomService.joinRoom(
+            message as MessageFormat<JoinGameDto>,
+            clientId,
+            this.clients.get(clientId)!
+          );
           break;
         default:
           WebSocketService.sendError(ws, "field 'type' unrecognized");

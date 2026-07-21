@@ -65,11 +65,8 @@ async function main() {
   wsService.initialize();
 
   server.on("upgrade", async (request: IncomingMessage, socket, head) => {
-    console.log("🚀 ~ main ~ request:", request);
     const cookies = parseCookies(request.headers.cookie);
-    console.log("🚀 ~ main ~ cookies:", cookies);
     const token = cookies.token;
-    console.log("🚀 ~ main ~ token:", token);
 
     if (!token) {
       socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n");

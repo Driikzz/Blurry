@@ -113,15 +113,4 @@ export class GameService {
   async deleteGame(game: Game) {
     await game.remove();
   }
-
-  // WebSocket
-  async joinRoom(ws: WebSocket, payload: MessageFormat<JoinGameDto>) {
-    if (!payload.payload.gameId || !payload.payload.userId) {
-      WebSocketService.sendError(ws, "wrong payload, bad request");
-      return;
-    }
-
-    const game = await this.getGameWithInclude(payload.payload.gameId);
-    WebSocketService.sendMessage(ws, game.toGameDto(), MessageType.JOIN_ROOM);
-  }
 }
