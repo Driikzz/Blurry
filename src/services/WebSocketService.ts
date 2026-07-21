@@ -2,7 +2,7 @@ import { IncomingMessage } from "http";
 import { WebSocketServer, WebSocket, RawData } from "ws";
 import { MessageFormat } from "../dtos/MessageFormat";
 import { GameService } from "./gameService";
-import { JoinGameDto } from "../dtos/Games";
+import { JoinGameDto, LeaveGameDto } from "../dtos/Games";
 import { User } from "../entities/User";
 import { WebSocketRoomService } from "./WebSocketRoomService";
 
@@ -16,6 +16,7 @@ export interface ClientInformations {
 export enum MessageType {
   ERROR = "error",
   JOIN_ROOM = "join_room",
+  LEAVE_ROOM = "leave_room",
 }
 
 export class WebSocketService {
@@ -87,6 +88,12 @@ export class WebSocketService {
             this.clients.get(clientId)!
           );
           break;
+        case MessageType.LEAVE_ROOM:
+          this.roomService.leaveRoom(
+            clientId,
+            message as MessageFormat<LeaveGameDto>
+          );
+          break;
         default:
           WebSocketService.sendError(ws, "field 'type' unrecognized");
           break;
@@ -98,7 +105,9 @@ export class WebSocketService {
     ws: WebSocket,
     request: IncomingMessage,
     clientId: string
-  ) {}
+  ) {
+    this.roomService.leaveRoom(clientId);
+  }
 
   handleErrors(ws: WebSocket, request: IncomingMessage, clientId: string) {}
 

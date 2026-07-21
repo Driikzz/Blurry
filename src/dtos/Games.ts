@@ -42,6 +42,10 @@ export interface JoinGameDto {
   gameId: number;
 }
 
+export interface LeaveGameDto {
+  gameId: number;
+}
+
 // class validatior
 export class GameCreateValidator extends BaseValidator {
   @IsNotEmpty()

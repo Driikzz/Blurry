@@ -1,4 +1,4 @@
-import { JoinGameDto } from "../dtos/Games";
+import { JoinGameDto, LeaveGameDto } from "../dtos/Games";
 import { MessageFormat } from "../dtos/MessageFormat";
 import { GameService } from "./gameService";
 import {
@@ -43,6 +43,37 @@ export class WebSocketRoomService {
     );
   }
 
+  async leaveRoom(
+    clientId: string,
+    message: MessageFormat<LeaveGameDto> | undefined = undefined
+  ) {
+    let room: Map<string, ClientInformations> | null | undefined = null;
+    let gameId: number | null | undefined = null;
+    if (message) {
+      gameId = message.payload.gameId;
+      room = this.rooms.get(gameId);
+    } else {
+      const found = this.getRoomByClientId(clientId);
+      if (found) {
+        [gameId, room] = found;
+      }
+    }
+
+    if (!room || !gameId) return;
+    room.delete(clientId);
+
+    if (room.size === 0) {
+      this.rooms.delete(gameId);
+    } else {
+      this.broadcastMessage(
+        gameId,
+        `a member left your room, the room is now with ${this.getRoomSize(gameId)}`,
+        MessageType.LEAVE_ROOM,
+        null
+      );
+    }
+  }
+
   broadcastMessage(
     roomId: number,
     message: any,
@@ -68,5 +99,17 @@ export class WebSocketRoomService {
   getRoomSize(roomId: number) {
     const room = this.rooms.get(roomId);
     return room ? room.size : 0;
+  }
+
+  getRoomByClientId(
+    clientId: string
+  ): null | [number, Map<string, ClientInformations>] {
+    for (const [gameId, clientMap] of this.rooms) {
+      if (clientMap.has(clientId)) {
+        return [gameId, clientMap];
+      }
+    }
+
+    return null;
   }
 }
