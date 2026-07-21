@@ -3,14 +3,17 @@ import { GameService } from "../services/gameService";
 import { GamePostDto, GamePutDto } from "../dtos/Games";
 import { GameStatus } from "../entities/Game";
 import { ImageService } from "../services/ImageService";
+import { MediaService } from "../services/mediaService";
 
 export class GameController {
   gameService: GameService;
   imageService: ImageService;
+  mediaService: MediaService;
 
   constructor() {
     this.gameService = new GameService();
     this.imageService = new ImageService();
+    this.mediaService = new MediaService();
   }
 
   async getAll(req: Request, res: Response) {
@@ -103,12 +106,18 @@ export class GameController {
   }
 
   async testReturnBlurredImage(req: Request, res: Response) {
-    const imagePath = String(req.params.id);
-    const blurAmount = 10; // You can adjust the blur amount as needed
+    const mediaId = Number(req.params.id);
+    const blurAmount = 70;
 
     try {
+      const image = await this.mediaService.getMediaById(mediaId);
+
+      if (!image) {
+        return res.status(404).send({ message: "Image not found" });
+      }
+
       const blurredImage = await this.imageService.returnBlurredImage(
-        imagePath,
+        image.path,
         blurAmount
       );
       res.set("Content-Type", "image/jpeg");

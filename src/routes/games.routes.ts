@@ -30,4 +30,8 @@ router.delete("/:id", requireConnected, (req: Request, res: Response) =>
   controller.delete(req, res)
 );
 
+router.get("/test/blurred-image/:id", (req: Request, res: Response) =>
+  controller.testReturnBlurredImage(req, res)
+);
+
 module.exports = router;
