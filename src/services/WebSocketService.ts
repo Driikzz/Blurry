@@ -106,7 +106,10 @@ export class WebSocketService {
     request: IncomingMessage,
     clientId: string
   ) {
-    this.roomService.leaveRoom(clientId);
+    ws.on("close", () => {
+      this.roomService.leaveRoom(clientId);
+      this.clients.delete(clientId);
+    });
   }
 
   handleErrors(ws: WebSocket, request: IncomingMessage, clientId: string) {}

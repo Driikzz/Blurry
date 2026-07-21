@@ -51,14 +51,11 @@ export class WebSocketRoomService {
     let gameId: number | null | undefined = null;
     if (message) {
       gameId = message.payload.gameId;
-      room = this.rooms.get(gameId);
     } else {
-      const found = this.getRoomByClientId(clientId);
-      if (found) {
-        [gameId, room] = found;
-      }
+      gameId = this.getRoomByClientId(clientId);
     }
 
+    room = gameId ? this.rooms.get(gameId) : null;
     if (!room || !gameId) return;
     room.delete(clientId);
 
@@ -101,12 +98,10 @@ export class WebSocketRoomService {
     return room ? room.size : 0;
   }
 
-  getRoomByClientId(
-    clientId: string
-  ): null | [number, Map<string, ClientInformations>] {
+  getRoomByClientId(clientId: string): null | number {
     for (const [gameId, clientMap] of this.rooms) {
       if (clientMap.has(clientId)) {
-        return [gameId, clientMap];
+        return gameId;
       }
     }
 
