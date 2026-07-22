@@ -1,0 +1,31 @@
+info:
+  name: ST_CREATE_GAME_AS_OWNER
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{baseUrl}}/games"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Security Test Game",
+        "userIds": [{{ownerUserId}}],
+        "quizId": {{ownerQuizId}}
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("owner creates a game used as the IDOR target", function () {
+          expect(res.getStatus()).to.equal(201);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

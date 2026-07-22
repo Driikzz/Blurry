@@ -1,0 +1,31 @@
+info:
+  name: ST_REGISTER_OWNER
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/register"
+  body:
+    type: json
+    data: |-
+      {
+        "email": "security.owner@blurry.test",
+        "password": "SecurityTest123",
+        "name": "Security Owner"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("owner account is created or already exists", function () {
+          expect(res.getStatus()).to.be.oneOf([201, 409]);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

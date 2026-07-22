@@ -1,0 +1,35 @@
+info:
+  name: ST_CREATE_QUIZ_AS_OWNER
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{baseUrl}}/quiz"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Security Test Quiz"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.getStatus() === 201) {
+          bru.setEnvVar("ownerQuizId", res.getBody().id);
+        }
+    - type: tests
+      code: |-
+        test("owner creates a quiz used as the IDOR target", function () {
+          expect(res.getStatus()).to.equal(201);
+          expect(res.getBody().id).to.be.a("number");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
