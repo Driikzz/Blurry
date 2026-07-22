@@ -1,22 +1,21 @@
 import express, { Request, Response } from "express";
 import cookieParser from "cookie-parser";
+import path from "path";
+import { createServer, IncomingMessage } from "http";
+import { WebSocketServer } from "ws";
 import { AppDataSource } from "./data-source";
+import { WebSocketService } from "./services/WebSocketService";
+import { getUserFromToken } from "./middlewares/auth.middleware";
+import userRouter from "./routes/users.routes";
+import gamesRouter from "./routes/games.routes";
+import quizRouter from "./routes/quiz.routes";
+import authRouter from "./routes/auth.routes";
+import questionsRouter from "./routes/questions.routes";
+import mediasRouter from "./routes/medias.routes";
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-const userRouter = require("./routes/users.routes");
-const gamesRouter = require("./routes/games.routes");
-const quizRouter = require("./routes/quiz.routes");
-const authRouter = require("./routes/auth.routes");
-const questionsRouter = require("./routes/questions.routes");
-const mediasRouter = require("./routes/medias.routes");
-require("dotenv").config();
-import path from "path";
-import { createServer, IncomingMessage } from "http";
-import { WebSocketServer } from "ws";
-import { WebSocketService } from "./services/WebSocketService";
-import { getUserFromToken } from "./middlewares/auth.middleware";
 
 function parseCookies(header?: string): Record<string, string> {
   const cookies: Record<string, string> = {};
@@ -87,7 +86,7 @@ async function main() {
       ws.handleUpgrade(request, socket, head, (websocket) => {
         ws.emit("connection", websocket, request);
       });
-    } catch (error) {
+    } catch {
       socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n");
       socket.destroy();
     }

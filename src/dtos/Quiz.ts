@@ -1,17 +1,6 @@
-import {
-  ArrayMinSize,
-  IsArray,
-  IsNotEmpty,
-  MinLength,
-  ValidateNested,
-} from "class-validator";
-import { Type } from "class-transformer";
+import { IsNotEmpty, MinLength } from "class-validator";
 import { BaseValidator } from "./BaseValidator";
-import {
-  QuestionCreateValidator,
-  QuestionDto,
-  QuestionPostDto,
-} from "./Question";
+import { QuestionDto } from "./Question";
 import { UserDto } from "./Users";
 
 export interface QuizDto {

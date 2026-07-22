@@ -54,4 +54,4 @@ router.delete("/:id", requireConnected, (req: Request, res: Response) =>
   controller.DeleteQuestion(req, res)
 );
 
-module.exports = router;
+export default router;

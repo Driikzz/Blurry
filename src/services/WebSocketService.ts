@@ -1,4 +1,5 @@
 import { IncomingMessage } from "http";
+import crypto from "crypto";
 import { WebSocketServer, WebSocket, RawData } from "ws";
 import { MessageFormat } from "../dtos/MessageFormat";
 import { GameService } from "./gameService";
@@ -22,14 +23,12 @@ export enum MessageType {
 export class WebSocketService {
   ws: WebSocketServer;
   clients: Map<string, ClientInformations>;
-  crypto: any;
   gameService: GameService;
   roomService: WebSocketRoomService;
 
   constructor(webSocket: WebSocketServer) {
     this.ws = webSocket;
     this.clients = new Map<string, ClientInformations>();
-    this.crypto = require("crypto");
     this.gameService = new GameService();
     this.roomService = new WebSocketRoomService();
   }
@@ -41,7 +40,7 @@ export class WebSocketService {
   }
 
   initConnection(ws: WebSocket, request: IncomingMessage) {
-    const clientId = this.crypto
+    const clientId = crypto
       .createHash("sha256")
       .update(new Date().toString())
       .digest("hex");
@@ -65,7 +64,7 @@ export class WebSocketService {
       })
     );
 
-    this.handleIncommingMessage(ws, request, clientId, user);
+    this.handleIncommingMessage(ws, request, clientId);
     this.handleConnectionClose(ws, request, clientId);
     this.handleErrors(ws, request, clientId);
   }
@@ -73,8 +72,7 @@ export class WebSocketService {
   handleIncommingMessage(
     ws: WebSocket,
     request: IncomingMessage,
-    clientId: string,
-    user: User
+    clientId: string
   ) {
     ws.on("message", (data) => {
       const message = this.validateRecieveMessage(ws, data);
@@ -112,17 +110,17 @@ export class WebSocketService {
     });
   }
 
-  handleErrors(ws: WebSocket, request: IncomingMessage, clientId: string) {}
+  handleErrors(_ws: WebSocket, _request: IncomingMessage, _clientId: string) {}
 
   validateRecieveMessage(ws: WebSocket, data: RawData) {
     let message;
     try {
       message = JSON.parse(data.toString());
-    } catch (error) {
+    } catch {
       WebSocketService.sendError(ws, "invalid payload JSON format");
     }
 
-    let errors: string[] = [];
+    const errors: string[] = [];
     if (!message.type) {
       errors.push("field 'type' is required");
     }
