@@ -47,15 +47,14 @@ export class WebSocketRoomService {
     clientId: string,
     message: MessageFormat<LeaveGameDto> | undefined = undefined
   ) {
-    let room: Map<string, ClientInformations> | null | undefined = null;
-    let gameId: number | null | undefined = null;
+    let gameId: number | null | undefined;
     if (message) {
       gameId = message.payload.gameId;
     } else {
       gameId = this.getRoomByClientId(clientId);
     }
 
-    room = gameId ? this.rooms.get(gameId) : null;
+    const room = gameId ? this.rooms.get(gameId) : null;
     if (!room || !gameId) return;
     room.delete(clientId);
 

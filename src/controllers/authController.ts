@@ -1,22 +1,12 @@
-import { validate } from "class-validator";
-import {
-  UserCreateValidator,
-  UserLoginDto,
-  UserLoginValidator,
-  UserPostDto,
-} from "../dtos/Users";
+import { UserLoginDto, UserPostDto } from "../dtos/Users";
 import { AuthService } from "../services/authService";
 import { Request, Response } from "express";
 
 export class AuthController {
   authservice: AuthService;
-  crypto: any;
-  jwt: any;
 
   constructor() {
     this.authservice = new AuthService();
-    this.crypto = require("crypto");
-    this.jwt = require("jsonwebtoken");
   }
 
   async register(req: Request, res: Response) {
@@ -31,7 +21,7 @@ export class AuthController {
 
       const createdUSer = await this.authservice.createUser(datas);
       return res.status(201).json(createdUSer);
-    } catch (error) {
+    } catch {
       return res.status(500).json({
         message: "Internal server error",
       });

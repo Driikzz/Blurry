@@ -34,4 +34,4 @@ router.get("/test/blurred-image/:id", (req: Request, res: Response) =>
   controller.testReturnBlurredImage(req, res)
 );
 
-module.exports = router;
+export default router;

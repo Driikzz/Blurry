@@ -122,7 +122,7 @@ export class GameController {
       );
       res.set("Content-Type", "image/jpeg");
       return res.status(200).send(blurredImage);
-    } catch (error) {
+    } catch {
       return res
         .status(500)
         .send({ message: "Error occurred while processing the image" });

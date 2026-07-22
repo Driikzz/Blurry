@@ -20,4 +20,4 @@ router.post("/logout", (req: Request, res: Response) =>
   controller.logout(req, res)
 );
 
-module.exports = router;
+export default router;

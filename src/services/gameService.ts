@@ -1,14 +1,11 @@
 import { In } from "typeorm";
-import { GameDto, GamePostDto, GamePutDto, JoinGameDto } from "../dtos/Games";
+import { GameDto, GamePostDto, GamePutDto } from "../dtos/Games";
 import { PaginatedResult } from "../dtos/PaginatedResults";
 import { Game, GameStatus } from "../entities/Game";
 import { Quiz } from "../entities/Quiz";
 import { User } from "../entities/User";
 import { GameNotFoundException } from "../exceptions/GameNotFoundException";
 import { GameRoundService } from "./gameRoundService";
-import { MessageFormat } from "../dtos/MessageFormat";
-import { WebSocket } from "ws";
-import { MessageType, WebSocketService } from "./WebSocketService";
 
 export class GameService {
   gameRoundService: GameRoundService;

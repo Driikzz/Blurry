@@ -1,8 +1,4 @@
-import express, {
-  type Request,
-  type Response,
-  type NextFunction,
-} from "express";
+import express, { type Request, type Response } from "express";
 import { UserController } from "../controllers/userController";
 import { UserService } from "../services/userService";
 import { requireConnected } from "../middlewares/auth.middleware";
@@ -33,4 +29,4 @@ router.delete("/:id", (req: Request, res: Response) =>
   controller.delete(req, res)
 );
 
-module.exports = router;
+export default router;
