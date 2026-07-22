@@ -31,6 +31,11 @@ export class UserController {
   update = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
     const userData = req.body;
+
+    if (id !== req.user!.id) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
     try {
       if (!userData) {
         return res.status(400).json({ message: "User data is required" });
@@ -44,6 +49,11 @@ export class UserController {
 
   delete = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
+
+    if (id !== req.user!.id) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
     try {
       const response = await this.userService.delete(id);
       return res.status(200).json(response);
