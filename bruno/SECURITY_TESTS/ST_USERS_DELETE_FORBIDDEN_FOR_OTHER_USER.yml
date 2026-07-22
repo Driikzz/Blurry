@@ -1,0 +1,23 @@
+info:
+  name: ST_USERS_DELETE_FORBIDDEN_FOR_OTHER_USER
+  type: http
+  seq: 15
+
+http:
+  method: DELETE
+  url: "{{baseUrl}}/users/{{ownerUserId}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("attacker cannot delete another user's account", function () {
+          expect(res.getStatus()).to.equal(403);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,17 +1,18 @@
 info:
-  name: ST_LOGIN_ERROR_PASSWORD
+  name: ST_USERS_UPDATE_NO_AUTH
   type: http
-  seq: 5
+  seq: 17
 
 http:
-  method: POST
-  url: "{{baseUrl}}/auth/login"
+  method: PUT
+  url: "{{baseUrl}}/users/{{ownerUserId}}"
   body:
     type: json
     data: |-
       {
-        "email" : "test@gmail.com",
-        "password" : "jesuisunfauxmotdepasse"
+        "name": "Pwned",
+        "email": "still-valid@blurry.test",
+        "password": "whateverpassword"
       }
   auth: inherit
 
@@ -19,7 +20,7 @@ runtime:
   scripts:
     - type: tests
       code: |-
-        test("test email not found", function () {
+        test("updating a user without being authenticated is rejected", function () {
           expect(res.getStatus()).to.equal(401);
         });
 

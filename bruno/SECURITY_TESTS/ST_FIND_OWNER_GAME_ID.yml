@@ -1,0 +1,40 @@
+info:
+  name: ST_FIND_OWNER_GAME_ID
+  type: http
+  seq: 7
+
+http:
+  method: GET
+  url: "{{baseUrl}}/games"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const body = res.getBody();
+        const games = (body && body.results) || [];
+        const ownerId = Number(bru.getEnvVar("ownerUserId"));
+        const created = games
+          .filter(
+            (g) =>
+              g.name === "Security Test Game" &&
+              g.createdBy &&
+              g.createdBy.id === ownerId
+          )
+          .sort((a, b) => b.id - a.id)[0];
+        if (created) {
+          bru.setEnvVar("ownerGameId", created.id);
+        }
+    - type: tests
+      code: |-
+        test("owner's game id is captured for later requests", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(bru.getEnvVar("ownerGameId")).to.not.be.undefined;
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

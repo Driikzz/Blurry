@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { MediaService } from "../services/mediaService";
+import { Question } from "../entities/Question";
 
 export class MediaController {
   mediaService: MediaService;
@@ -19,6 +20,14 @@ export class MediaController {
       return res
         .status(404)
         .send({ message: `Media not found with this id: ${mediaId}` });
+
+    const question = await Question.findOne({
+      where: { picture: media.path },
+      relations: { quiz: { createdBy: true } },
+    });
+
+    if (question && question.quiz.createdBy.id != req.user!.id)
+      return res.status(403).send({ message: "Forbidden" });
 
     await media.remove();
 

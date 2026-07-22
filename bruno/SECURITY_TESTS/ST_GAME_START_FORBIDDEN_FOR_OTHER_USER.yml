@@ -1,0 +1,23 @@
+info:
+  name: ST_GAME_START_FORBIDDEN_FOR_OTHER_USER
+  type: http
+  seq: 12
+
+http:
+  method: POST
+  url: "{{baseUrl}}/games/start/{{ownerGameId}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("attacker cannot start another user's game", function () {
+          expect(res.getStatus()).to.equal(403);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
