@@ -1,10 +1,4 @@
-import { validate } from "class-validator";
-import {
-  UserCreateValidator,
-  UserDto,
-  UserPostDto,
-  UserUpdateValidator,
-} from "../dtos/Users";
+import { UserPostDto } from "../dtos/Users";
 import { User } from "../entities/User";
 
 export class UserService {

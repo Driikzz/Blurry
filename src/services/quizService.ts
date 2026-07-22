@@ -1,7 +1,5 @@
 import { PaginatedResult } from "../dtos/PaginatedResults";
 import { QuizDto, QuizPostDto } from "../dtos/Quiz";
-import { Media } from "../entities/Media";
-import { Question } from "../entities/Question";
 import { Quiz } from "../entities/Quiz";
 import { User } from "../entities/User";
 

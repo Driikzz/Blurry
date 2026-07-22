@@ -4,7 +4,7 @@ import { Question } from "../entities/Question";
 
 export class GameRoundService {
   async createNewRound(game: Game, question: Question) {
-    let newRound = new GameRound();
+    const newRound = new GameRound();
     newRound.game = game;
     newRound.gameRoundAnswers = [];
     newRound.question = question;

@@ -1,8 +1,4 @@
-import express, {
-  type Request,
-  type Response,
-  type NextFunction,
-} from "express";
+import express, { type Request, type Response } from "express";
 import { UserController } from "../controllers/userController";
 import { UserService } from "../services/userService";
 import { requireConnected } from "../middlewares/auth.middleware";
@@ -25,12 +21,13 @@ router.get("/", (req: Request, res: Response) => controller.getAll(req, res));
 
 router.put(
   "/:id",
+  requireConnected,
   validatorTest(UserUpdateValidator),
   (req: Request, res: Response) => controller.update(req, res)
 );
 
-router.delete("/:id", (req: Request, res: Response) =>
+router.delete("/:id", requireConnected, (req: Request, res: Response) =>
   controller.delete(req, res)
 );
 
-module.exports = router;
+export default router;

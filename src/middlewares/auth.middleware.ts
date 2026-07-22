@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import { User } from "../entities/User";
-
-const jwt = require("jsonwebtoken");
 
 export const getUserFromToken = (token: string): Promise<User | null> => {
   return new Promise((resolve, reject) => {
     jwt.verify(
       token,
-      process.env.JWT_SECRET_KEY,
+      process.env.JWT_SECRET_KEY!,
       async (err: any, decoded: any) => {
         if (err) return reject(err);
 
@@ -30,7 +29,7 @@ export const requireConnected = async (
   try {
     req.user = await getUserFromToken(token);
     next();
-  } catch (error) {
+  } catch {
     return res.status(401).send({ message: "Unauthorized access" });
   }
 };

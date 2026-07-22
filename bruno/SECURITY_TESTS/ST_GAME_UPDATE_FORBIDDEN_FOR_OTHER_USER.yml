@@ -1,0 +1,31 @@
+info:
+  name: ST_GAME_UPDATE_FORBIDDEN_FOR_OTHER_USER
+  type: http
+  seq: 11
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/games/{{ownerGameId}}"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Hacked by attacker",
+        "userIds": [{{ownerUserId}}],
+        "quizId": {{ownerQuizId}}
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("attacker cannot update another user's game", function () {
+          expect(res.getStatus()).to.equal(403);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,31 @@
+info:
+  name: ST_REGISTER_ATTACKER
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/register"
+  body:
+    type: json
+    data: |-
+      {
+        "email": "security.attacker@blurry.test",
+        "password": "SecurityTest123",
+        "name": "Security Attacker"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("attacker account is created or already exists", function () {
+          expect(res.getStatus()).to.be.oneOf([201, 409]);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

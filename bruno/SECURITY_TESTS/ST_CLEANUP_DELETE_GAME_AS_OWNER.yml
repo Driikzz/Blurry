@@ -1,0 +1,23 @@
+info:
+  name: ST_CLEANUP_DELETE_GAME_AS_OWNER
+  type: http
+  seq: 22
+
+http:
+  method: DELETE
+  url: "{{baseUrl}}/games/{{ownerGameId}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("owner cleans up the game created for these tests", function () {
+          expect(res.getStatus()).to.equal(204);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

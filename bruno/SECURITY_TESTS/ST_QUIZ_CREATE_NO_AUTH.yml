@@ -1,0 +1,29 @@
+info:
+  name: ST_QUIZ_CREATE_NO_AUTH
+  type: http
+  seq: 20
+
+http:
+  method: POST
+  url: "{{baseUrl}}/quiz"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Should never be created"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("creating a quiz without being authenticated is rejected", function () {
+          expect(res.getStatus()).to.equal(401);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

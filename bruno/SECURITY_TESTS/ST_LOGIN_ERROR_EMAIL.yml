@@ -1,7 +1,7 @@
 info:
   name: ST_LOGIN_ERROR_EMAIL
   type: http
-  seq: 4
+  seq: 24
 
 http:
   method: POST

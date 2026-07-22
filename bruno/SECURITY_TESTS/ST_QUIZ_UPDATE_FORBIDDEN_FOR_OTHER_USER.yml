@@ -1,0 +1,29 @@
+info:
+  name: ST_QUIZ_UPDATE_FORBIDDEN_FOR_OTHER_USER
+  type: http
+  seq: 9
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/quiz/{{ownerQuizId}}"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Hacked by attacker"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("attacker cannot update another user's quiz", function () {
+          expect(res.getStatus()).to.equal(403);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

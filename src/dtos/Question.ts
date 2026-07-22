@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, MinLength } from "class-validator";
+import { IsNotEmpty, MinLength } from "class-validator";
 import { BaseValidator } from "./BaseValidator";
 
 export interface QuestionDto {

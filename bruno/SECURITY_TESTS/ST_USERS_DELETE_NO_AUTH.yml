@@ -1,0 +1,23 @@
+info:
+  name: ST_USERS_DELETE_NO_AUTH
+  type: http
+  seq: 18
+
+http:
+  method: DELETE
+  url: "{{baseUrl}}/users/{{ownerUserId}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("deleting a user without being authenticated is rejected", function () {
+          expect(res.getStatus()).to.equal(401);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -9,4 +9,4 @@ router.delete("/:id", requireConnected, (req: Request, res: Response) =>
   controller.deleteMedia(req, res)
 );
 
-module.exports = router;
+export default router;

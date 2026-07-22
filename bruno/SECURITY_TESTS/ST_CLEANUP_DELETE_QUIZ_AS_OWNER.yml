@@ -1,0 +1,23 @@
+info:
+  name: ST_CLEANUP_DELETE_QUIZ_AS_OWNER
+  type: http
+  seq: 23
+
+http:
+  method: DELETE
+  url: "{{baseUrl}}/quiz/{{ownerQuizId}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("owner cleans up the quiz created for these tests", function () {
+          expect(res.getStatus()).to.equal(204);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
