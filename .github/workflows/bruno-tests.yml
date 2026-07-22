@@ -1,0 +1,38 @@
+name: API Tests (Bruno)
+
+on:
+  push:
+
+jobs:
+  bruno:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create .env file for CI
+        run: |
+          cat <<'EOF' > .env
+          JWT_SECRET_KEY=zkfubzkkjkfuykjzfuinkzebfzmdnlihio
+          POSTGRES_USER=admin
+          POSTGRES_PASSWORD=jesuisunmotdepassefort!
+          POSTGRES_DB=blurry
+          EOF
+
+      - name: Start API and database
+        run: docker compose up --build -d --wait
+
+      - name: Run Bruno tests
+        uses: usebruno/bruno-cli-action@v1
+        with:
+          working-directory: bruno/
+          command: "run --env Local --tests-only"
+
+      - name: Dump container logs on failure
+        if: failure()
+        run: docker compose logs
+
+      - name: Stop API and database
+        if: always()
+        run: docker compose down -v
