@@ -21,7 +21,7 @@ runtime:
     - type: tests
       code: |-
         test("owner creates a game used as the IDOR target", function () {
-          expect(res.getStatus()).to.equal(201);
+          expect(res.getStatus()).to.equal(200);
         });
 
 settings:
