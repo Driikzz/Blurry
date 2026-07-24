@@ -11,7 +11,7 @@ services:
     volumes:
       - sql_data:/data/postgres
     ports:
-      - 5433:5432
+      - 5434:5432
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 5s
@@ -20,13 +20,15 @@ services:
 
   api:
     container_name: api
-    image: ghcr.io/driikzz/blurry:latest
+    image: ghcr.io/driikzz/blurry:develop
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
     env_file:
       - .env
     volumes:
       - ./uploads:/app/uploads
     ports:
-      - 3000:3000
+      - 3001:3000
     depends_on:
       database:
         condition: service_healthy
