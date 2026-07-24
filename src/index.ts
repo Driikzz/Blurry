@@ -37,7 +37,7 @@ async function main() {
   await AppDataSource.initialize();
 
   app.get("/", (request: Request, response: Response) => {
-    response.status(200).send("Hello World");
+    response.status(200).send("Hello World updated");
   });
 
   app.get("/health", (request: Request, response: Response) => {
