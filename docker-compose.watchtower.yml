@@ -1,0 +1,15 @@
+services:
+  watchtower:
+    container_name: watchtower
+    image: nickfedor/watchtower:latest
+    restart: unless-stopped
+    environment:
+      # ne met a jour que les conteneurs labelises com.centurylinklabs.watchtower.enable=true
+      - WATCHTOWER_LABEL_ENABLE=true
+      # ici toutes les minutes
+      - WATCHTOWER_SCHEDULE=0 * * * * *
+      - WATCHTOWER_CLEANUP=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # authentification via PAT github (read:package) dans un fichier appart pour fonctionner avec tous les OS
+      - "./ghcr-auth.json:/config.json:ro"

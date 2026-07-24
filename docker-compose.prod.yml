@@ -1,6 +1,6 @@
 services:
-  database:
-    container_name: database
+  database-int:
+    container_name: database-int
     image: postgres:15.18-trixie
     env_file:
       - .env
@@ -9,26 +9,28 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - PGDATA=/data/postgres
     volumes:
-      - sql_data:/data/postgres
+      - sql_data_int:/data/postgres
     ports:
-      - 5433:5432
+      - 5434:5432
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  api:
-    container_name: api
-    image: ghcr.io/driikzz/blurry:latest
+  api-int:
+    container_name: api-int
+    image: ghcr.io/driikzz/blurry:develop
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
     env_file:
       - .env
     volumes:
       - ./uploads:/app/uploads
     ports:
-      - 3000:3000
+      - 3001:3000
     depends_on:
-      database:
+      database-int:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
@@ -38,8 +40,5 @@ services:
       retries: 5
       start_period: 5s
 
-networks:
-  postgre:
-
 volumes:
-  sql_data:
+  sql_data_int:

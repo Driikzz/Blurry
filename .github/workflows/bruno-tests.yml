@@ -1,7 +1,6 @@
 name: API Tests (Bruno)
 
 on:
-  push:
   pull_request:
     branches:
       - main

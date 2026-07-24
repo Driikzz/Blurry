@@ -27,6 +27,8 @@ COPY --from=builder /app/dist ./dist
 
 COPY package.json package.json
 COPY package-lock.json package-lock.json
-RUN npm i
+RUN npm i --omit=dev
 
-CMD ["npm", "run", "start"]
+RUN mkdir -p uploads
+
+CMD ["node", "dist/index.js"]
