@@ -20,7 +20,9 @@ services:
 
   api:
     container_name: api
-    image: ghcr.io/driikzz/blurry:latest
+    image: ghcr.io/driikzz/blurry:develop
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
     env_file:
       - .env
     volumes:

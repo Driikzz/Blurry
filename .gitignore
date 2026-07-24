@@ -6,3 +6,4 @@ temp/
 dist/
 db/
 .env
+ghcr-auth.json
