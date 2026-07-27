@@ -1,0 +1,44 @@
+info:
+  name: 07 GET CURRENT IMAGE WITH HTTP
+  type: http
+  seq: 7
+
+http:
+  method: GET
+  url: "{{baseUrl}}/games/:gameId/current-round/image"
+  params:
+    - name: gameId
+      value: "{{gameLoopGameId}}"
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("the current blurred JPEG image is returned", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getHeader("content-type")).to.contain("image/jpeg");
+          expect(res.getSize().body).to.be.greaterThan(0);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  Cette requête utilise uniquement HTTP.
+
+  Après START GAME, l'exécuter immédiatement, puis la relancer environ toutes
+  les 10 secondes :
+  - 0 seconde : blurStep 0, flou 70 ;
+  - 10 secondes : blurStep 1, flou 50 ;
+  - 20 secondes : blurStep 2, flou 30 ;
+  - 30 secondes : blurStep 3, flou 15 ;
+  - 40 secondes : blurStep 4, flou 3.
+
+  L'image devient donc progressivement moins floue. Utiliser Preview dans
+  Bruno pour la visualiser. Après 50 secondes, la route peut répondre 410 si
+  la manche est expirée.

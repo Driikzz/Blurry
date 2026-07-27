@@ -1,0 +1,42 @@
+info:
+  name: 01 LOGIN
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+        "email": "test@gmail.com",
+        "password": "jesuisfortdefou"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const setCookie = res.getHeader("set-cookie");
+        const cookieHeader = Array.isArray(setCookie) ? setCookie[0] : setCookie;
+        const match = cookieHeader ? /token=([^;]+)/.exec(cookieHeader) : null;
+        if (match) {
+          bru.setEnvVar("token", match[1]);
+        }
+    - type: tests
+      code: |-
+        test("player logs in", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(bru.getEnvVar("token")).to.not.be.undefined;
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  Modifier les identifiants si cet utilisateur n'existe pas dans la base.

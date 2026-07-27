@@ -78,14 +78,27 @@ export class GameService {
   }
 
   async startGame(game: Game) {
+    if (game.users.length === 0) {
+      throw new Error("The game must have at least one player");
+    }
+
+    if (game.quiz.questions.length === 0) {
+      throw new Error("The quiz must have at least one question");
+    }
+
     game.status = GameStatus.IN_PROGRESS;
-    game.currentPlayer = game.users[0];
+    game.currentRound = 1;
     await game.save();
+
+    const questions = [...game.quiz.questions].sort(
+      (firstQuestion, secondQuestion) => firstQuestion.id - secondQuestion.id
+    );
     const createdNewRound = await this.gameRoundService.createNewRound(
       game,
-      game.quiz.questions[0]
+      questions[0]
     );
 
+    game.gameRounds ??= [];
     game.gameRounds.push(createdNewRound);
     return game;
   }
@@ -109,5 +122,9 @@ export class GameService {
 
   async deleteGame(game: Game) {
     await game.remove();
+  }
+
+  submitAnswer(gameRoundId: number, answer: string, userId: number) {
+    return this.gameRoundService.submitAnswer(gameRoundId, answer, userId);
   }
 }

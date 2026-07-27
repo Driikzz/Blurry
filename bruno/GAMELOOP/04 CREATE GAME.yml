@@ -1,0 +1,36 @@
+info:
+  name: 04 CREATE GAME
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{baseUrl}}/games"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Bruno Game Loop",
+        "userIds": [{{gameLoopUserId}}],
+        "quizId": {{gameLoopQuizId}}
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: gameLoopUserId
+      value: "1"
+    - name: gameLoopQuizId
+      value: "1"
+  scripts:
+    - type: tests
+      code: |-
+        test("waiting game is created", function () {
+          expect(res.getStatus()).to.equal(201);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

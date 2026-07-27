@@ -1,0 +1,43 @@
+info:
+  name: 06 START GAME
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{baseUrl}}/games/start/:gameId"
+  params:
+    - name: gameId
+      value: "{{gameLoopGameId}}"
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.getStatus() === 200) {
+          const game = res.getBody();
+          const activeRound = (game.gameRounds || []).find(
+            (round) => round.status === "IN_PROGRESS"
+          );
+          if (activeRound) {
+            bru.setEnvVar("gameLoopRoundId", activeRound.id);
+          }
+        }
+    - type: tests
+      code: |-
+        test("game and first round are started", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().status).to.equal(1);
+          expect(bru.getEnvVar("gameLoopRoundId")).to.not.be.undefined;
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  À partir de cette étape, la manche dure 50 secondes.

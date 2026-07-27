@@ -9,7 +9,7 @@ import {
 import { Game } from "./Game";
 import { Question } from "./Question";
 import { GameRoundAnswer } from "./GameRoundAswer";
-import { GameRoundDto } from "../dtos/GameRounds";
+import { GameRoundDto, GameRoundStatus } from "../dtos/GameRounds";
 
 @Entity()
 export class GameRound extends BaseEntity {
@@ -34,11 +34,34 @@ export class GameRound extends BaseEntity {
   @Column()
   roundNumber!: number;
 
+  @Column({ type: "timestamp", nullable: true })
+  startedAt!: Date | null;
+
+  @Column({ type: "timestamp", nullable: true })
+  endsAt!: Date | null;
+
+  @Column({ type: "timestamp", nullable: true })
+  endedAt!: Date | null;
+
+  @Column({ default: "WAITING" })
+  status!: GameRoundStatus;
+
+  @Column({ type: "int", nullable: true })
+  winnerId!: number | null;
+
   toGameRoundDto(): GameRoundDto {
     return {
       id: this.id,
-      question: this.question.toQuestionDto(),
+      question: {
+        id: this.question.id,
+        statement: this.question.statement,
+      },
       roundNumber: this.roundNumber,
+      startedAt: this.startedAt,
+      endsAt: this.endsAt,
+      endedAt: this.endedAt,
+      status: this.status,
+      winnerId: this.winnerId,
     };
   }
 }
