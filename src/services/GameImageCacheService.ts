@@ -7,18 +7,6 @@ export class GameImageCacheService {
     this.pendingImages = new Map<string, Promise<Buffer>>();
   }
 
-  getImageForRound(gameRoundId: number, blurStep: number): Buffer | null {
-    const cacheKey = this.createCacheKey(gameRoundId, blurStep);
-    return this.imageCache.get(cacheKey) ?? null;
-  }
-
-  setImageForRound(gameRoundId: number, blurStep: number, image: Buffer): void {
-    const cacheKey = this.createCacheKey(gameRoundId, blurStep);
-
-    this.pendingImages.delete(cacheKey);
-    this.imageCache.set(cacheKey, image);
-  }
-
   clearCacheForRound(gameRoundId: number): void {
     const roundPrefix = `${gameRoundId}:`;
 

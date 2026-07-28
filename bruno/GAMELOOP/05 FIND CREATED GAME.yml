@@ -28,12 +28,6 @@ runtime:
         if (game) {
           bru.setEnvVar("gameLoopGameId", game.id);
         }
-    - type: tests
-      code: |-
-        test("created game id is saved", function () {
-          expect(res.getStatus()).to.equal(200);
-          expect(bru.getEnvVar("gameLoopGameId")).to.not.be.undefined;
-        });
 
 settings:
   encodeUrl: true

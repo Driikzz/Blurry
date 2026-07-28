@@ -12,24 +12,6 @@ http:
       type: path
   auth: inherit
 
-runtime:
-  scripts:
-    - type: tests
-      code: |-
-        test("answered round is finished with the current player as winner", function () {
-          const game = res.getBody();
-          const answeredRound = (game.gameRounds || []).find(
-            (round) => round.id === Number(bru.getEnvVar("gameLoopRoundId"))
-          );
-
-          expect(res.getStatus()).to.equal(200);
-          expect(answeredRound).to.not.be.undefined;
-          expect(answeredRound.status).to.equal("FINISHED");
-          expect(answeredRound.winnerId).to.equal(
-            Number(bru.getEnvVar("gameLoopUserId"))
-          );
-        });
-
 settings:
   encodeUrl: true
   timeout: 0

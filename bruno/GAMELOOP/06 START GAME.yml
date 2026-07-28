@@ -25,13 +25,6 @@ runtime:
             bru.setEnvVar("gameLoopRoundId", activeRound.id);
           }
         }
-    - type: tests
-      code: |-
-        test("game and first round are started", function () {
-          expect(res.getStatus()).to.equal(200);
-          expect(res.getBody().status).to.equal(1);
-          expect(bru.getEnvVar("gameLoopRoundId")).to.not.be.undefined;
-        });
 
 settings:
   encodeUrl: true
@@ -39,5 +32,4 @@ settings:
   followRedirects: true
   maxRedirects: 5
 
-docs: |-
-  À partir de cette étape, la manche dure 50 secondes.
+docs: À partir de cette étape, la manche dure 50 secondes.

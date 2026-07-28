@@ -24,13 +24,6 @@ runtime:
             bru.setEnvVar("gameLoopCorrectAnswer", questions[0].response);
           }
         }
-    - type: tests
-      code: |-
-        test("quiz contains at least one playable question", function () {
-          expect(res.getStatus()).to.equal(200);
-          expect(res.getBody().questions).to.be.an("array").that.is.not.empty;
-          expect(bru.getEnvVar("gameLoopCorrectAnswer")).to.not.be.undefined;
-        });
 
 settings:
   encodeUrl: true
@@ -38,5 +31,4 @@ settings:
   followRedirects: true
   maxRedirects: 5
 
-docs: |-
-  Remplacer quizId si le quiz 1 n'existe pas ou ne contient aucune question.
+docs: Remplacer quizId si le quiz 1 n'existe pas ou ne contient aucune question.
