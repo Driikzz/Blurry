@@ -4,3 +4,11 @@ variables:
     value: http://localhost:3000
   - name: baseWsUrl
     value: ws://localhost:3000
+  - name: token
+    value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lIjoiTW9uIEp1bCAyNyAyMDI2IDE2OjA5OjE3IEdNVCswMDAwIChDb29yZGluYXRlZCBVbml2ZXJzYWwgVGltZSkiLCJ1c2VySWQiOjEsImlhdCI6MTc4NTE2ODU1NywiZXhwIjoxNzg1MjU0OTU3fQ.3_kriRS4Q-GQLs7nTly1LIAKuemFOIHL-NBI7m2uhNA
+  - name: gameLoopCorrectAnswer
+    value: Le silence des agneaux
+  - name: gameLoopGameId
+    value: "9"
+  - name: gameLoopRoundId
+    value: "8"

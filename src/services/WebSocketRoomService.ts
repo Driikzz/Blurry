@@ -1,4 +1,5 @@
 import { JoinGameDto, LeaveGameDto } from "../dtos/Games";
+import { BlurImageMetadataDto } from "../dtos/GameRounds";
 import { MessageFormat } from "../dtos/MessageFormat";
 import { GameService } from "./gameService";
 import {
@@ -20,7 +21,7 @@ export class WebSocketRoomService {
     message: MessageFormat<JoinGameDto>,
     clientId: string,
     clientInformations: ClientInformations
-  ) {
+  ): Promise<boolean> {
     const gameId = message.payload.gameId;
     const game = await this.gameService.getGameWithInclude(gameId);
 
@@ -28,7 +29,7 @@ export class WebSocketRoomService {
       game.users.find((u) => u.id == clientInformations.user.id) == null &&
       game.createdBy.id != clientInformations.user.id
     )
-      return;
+      return false;
 
     if (!this.rooms.has(gameId)) {
       this.rooms.set(gameId, new Map());
@@ -41,6 +42,8 @@ export class WebSocketRoomService {
       MessageType.JOIN_ROOM,
       null
     );
+
+    return true;
   }
 
   async leaveRoom(
@@ -90,6 +93,61 @@ export class WebSocketRoomService {
     }
 
     return sent;
+  }
+
+  broadcastImage(
+    roomId: number,
+    metadata: BlurImageMetadataDto,
+    image: Buffer
+  ) {
+    const room = this.rooms.get(roomId);
+    if (!room) return 0;
+
+    let sent = 0;
+    for (const client of room.values()) {
+      if (client.ws.readyState !== 1) continue;
+
+      WebSocketService.sendMessage(
+        client.ws,
+        metadata,
+        MessageType.BLUR_IMAGE_METADATA
+      );
+      client.ws.send(image, { binary: true });
+      sent++;
+    }
+
+    return sent;
+  }
+
+  sendMessageToClient(
+    roomId: number,
+    clientId: string,
+    message: any,
+    messageType: MessageType
+  ) {
+    const client = this.rooms.get(roomId)?.get(clientId);
+    if (!client || client.ws.readyState !== 1) return false;
+
+    WebSocketService.sendMessage(client.ws, message, messageType);
+    return true;
+  }
+
+  sendImageToClient(
+    roomId: number,
+    clientId: string,
+    metadata: BlurImageMetadataDto,
+    image: Buffer
+  ) {
+    const client = this.rooms.get(roomId)?.get(clientId);
+    if (!client || client.ws.readyState !== 1) return false;
+
+    WebSocketService.sendMessage(
+      client.ws,
+      metadata,
+      MessageType.BLUR_IMAGE_METADATA
+    );
+    client.ws.send(image, { binary: true });
+    return true;
   }
 
   getRoomSize(roomId: number) {

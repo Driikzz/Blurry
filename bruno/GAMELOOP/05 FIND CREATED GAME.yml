@@ -1,0 +1,36 @@
+info:
+  name: 05 FIND CREATED GAME
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: "{{baseUrl}}/games"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const body = res.getBody();
+        const games = (body && body.results) || [];
+        const userId = Number(bru.getEnvVar("gameLoopUserId"));
+        const game = games
+          .filter(
+            (item) =>
+              item.name === "Bruno Game Loop" &&
+              item.createdBy &&
+              item.createdBy.id === userId &&
+              item.status === 0
+          )
+          .sort((a, b) => b.id - a.id)[0];
+
+        if (game) {
+          bru.setEnvVar("gameLoopGameId", game.id);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

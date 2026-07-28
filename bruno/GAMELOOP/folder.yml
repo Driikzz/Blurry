@@ -1,0 +1,25 @@
+info:
+  name: GAMELOOP
+  type: folder
+  seq: 2
+
+request:
+  auth: inherit
+
+docs:
+  content: |-
+    # Scénario complet d'une partie
+
+    Exécuter les requêtes dans l'ordre de leur numéro.
+
+    Le scénario utilise le quiz 1 par défaut. La requête 03 permet de modifier
+    cet identifiant et récupère automatiquement la réponse de sa première
+    question.
+
+    Après START GAME, utiliser l'étape 07 pour visualiser l'image avec HTTP.
+    Relancer cette requête à 0, 10, 20, 30 et 40 secondes : le serveur calcule
+    le palier depuis startedAt et renvoie un JPEG de moins en moins flouté.
+
+    L'étape 08 reste disponible séparément pour tester la connexion
+    WebSocket et la récupération du palier courant.
+  type: text/markdown

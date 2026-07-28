@@ -1,0 +1,34 @@
+info:
+  name: 10 SUBMIT CORRECT ANSWER
+  type: websocket
+  seq: 10
+
+websocket:
+  url: "{{baseWsUrl}}"
+  headers:
+    - name: Cookie
+      value: "token={{token}}"
+  message:
+    type: json
+    data: |-
+      {
+        "type": "submit_answer",
+        "payload": {
+          "gameRoundId": {{gameLoopRoundId}},
+          "answer": "{{gameLoopCorrectAnswer}}"
+        },
+        "sentAt": "2026-07-24T12:00:10.000Z"
+      }
+  auth: inherit
+
+settings:
+  timeout: 0
+  keepAliveInterval: 0
+
+docs: |-
+  Connecter la socket et envoyer le message. Elle reçoit answer_result avec
+  isCorrect à true. La socket de l'étape 07 reçoit ensuite round_ended.
+
+  Avec un quiz d'une seule question, elle reçoit ensuite game_finished.
+  Avec plusieurs questions, round_started et la première image binaire de la
+  manche suivante sont envoyés automatiquement.

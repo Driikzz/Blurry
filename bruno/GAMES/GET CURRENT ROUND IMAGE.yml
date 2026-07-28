@@ -1,0 +1,30 @@
+info:
+  name: GET CURRENT ROUND IMAGE
+  type: http
+  seq: 8
+
+http:
+  method: GET
+  url: "{{baseUrl}}/games/:gameId/current-round/image"
+  params:
+    - name: gameId
+      value: "1"
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  # Prérequis
+
+  1. Se connecter avec la requête LOGIN.
+  2. Créer ou choisir une partie qui contient au moins une question et un joueur.
+  3. Démarrer la partie avec START GAME.
+  4. Exécuter cette requête avant la fin des 50 secondes.
+
+  Relancer la requête environ toutes les 10 secondes pour constater que
+  l'image devient progressivement moins floue.
