@@ -34,4 +34,10 @@ router.get("/test/blurred-image/:id", (req: Request, res: Response) =>
   controller.testReturnBlurredImage(req, res)
 );
 
+router.get(
+  "/:gameId/current-round/image",
+  requireConnected,
+  (req: Request, res: Response) => controller.getCurrentRoundImage(req, res)
+);
+
 export default router;

@@ -1,0 +1,23 @@
+info:
+  name: 11 GET GAME RESULT
+  type: http
+  seq: 11
+
+http:
+  method: GET
+  url: "{{baseUrl}}/games/:gameId"
+  params:
+    - name: gameId
+      value: "{{gameLoopGameId}}"
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  Pour un quiz avec plusieurs questions, répéter les étapes image et réponse
+  avec l'identifiant de la nouvelle manche.

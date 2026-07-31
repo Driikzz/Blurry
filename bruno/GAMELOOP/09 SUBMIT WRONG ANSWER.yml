@@ -1,0 +1,31 @@
+info:
+  name: 09 SUBMIT WRONG ANSWER
+  type: websocket
+  seq: 9
+
+websocket:
+  url: "{{baseWsUrl}}"
+  headers:
+    - name: Cookie
+      value: "token={{token}}"
+  message:
+    type: json
+    data: |-
+      {
+        "type": "submit_answer",
+        "payload": {
+          "gameRoundId": {{gameLoopRoundId}},
+          "answer": "mauvaise réponse"
+        },
+        "sentAt": "2026-07-24T12:00:05.000Z"
+      }
+  auth: inherit
+
+settings:
+  timeout: 0
+  keepAliveInterval: 0
+
+docs: |-
+  Connecter la socket, envoyer le message puis vérifier la réception de
+  answer_result avec isCorrect à false. La manche continue et les images
+  continuent d'arriver sur la socket de l'étape 07.

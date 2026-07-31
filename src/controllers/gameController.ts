@@ -4,6 +4,8 @@ import { GamePostDto, GamePutDto } from "../dtos/Games";
 import { GameStatus } from "../entities/Game";
 import { ImageService } from "../services/ImageService";
 import { MediaService } from "../services/mediaService";
+import { GameNotFoundException } from "../exceptions/GameNotFoundException";
+import { WebSocketService } from "../services/WebSocketService";
 
 export class GameController {
   gameService: GameService;
@@ -62,7 +64,8 @@ export class GameController {
     }
 
     const updatedGame = await this.gameService.startGame(game);
-    console.log("🚀 ~ GameController ~ startGame ~ updatedGame:", updatedGame);
+    await WebSocketService.current?.startGameLoop(updatedGame);
+
     return res.status(200).json(updatedGame.toGameDto());
   }
 
@@ -123,6 +126,61 @@ export class GameController {
       res.set("Content-Type", "image/jpeg");
       return res.status(200).send(blurredImage);
     } catch {
+      return res
+        .status(500)
+        .send({ message: "Error occurred while processing the image" });
+    }
+  }
+
+  async getCurrentRoundImage(req: Request, res: Response) {
+    const gameId = Number(req.params.gameId);
+
+    try {
+      const game = await this.gameService.getGameWithInclude(gameId);
+      const userId = req.user!.id;
+      const canAccessGame =
+        game.createdBy.id === userId ||
+        game.users.some((user) => user.id === userId);
+
+      if (!canAccessGame) {
+        return res.status(403).send({ message: "Forbidden" });
+      }
+
+      if (game.status !== GameStatus.IN_PROGRESS) {
+        return res.status(400).send({ message: "Game is not in progress" });
+      }
+
+      const activeRound =
+        this.gameService.gameRoundService.getActiveRound(game);
+
+      if (!activeRound) {
+        return res.status(404).send({ message: "No active round found" });
+      }
+
+      if (this.gameService.gameRoundService.isRoundExpired(activeRound)) {
+        return res.status(410).send({ message: "Game round has expired" });
+      }
+
+      const blurStep =
+        this.gameService.gameRoundService.getCurrentBlurStep(activeRound);
+
+      const blurredImage = await this.imageService.getImageForBlurStep(
+        activeRound.question.picture,
+        blurStep
+      );
+
+      res.set({
+        "Content-Type": "image/jpeg",
+        "Cache-Control": "no-store",
+      });
+      return res.status(200).send(blurredImage);
+    } catch (error) {
+      if (error instanceof GameNotFoundException) {
+        return res
+          .status(404)
+          .send({ message: `Game not found with this id: ${gameId}` });
+      }
+
       return res
         .status(500)
         .send({ message: "Error occurred while processing the image" });

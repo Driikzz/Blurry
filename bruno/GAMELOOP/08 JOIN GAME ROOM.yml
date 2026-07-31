@@ -1,0 +1,32 @@
+info:
+  name: 08 RECONNECT AND CHECK CURRENT CACHED STEP
+  type: websocket
+  seq: 8
+
+websocket:
+  url: "{{baseWsUrl}}"
+  headers:
+    - name: Cookie
+      value: "token={{token}}"
+  message:
+    type: json
+    data: |-
+      {
+        "type": "join_room",
+        "payload": {
+          "gameId": {{gameLoopGameId}}
+        },
+        "sentAt": "2026-07-24T12:00:00.000Z"
+      }
+  auth: inherit
+
+settings:
+  timeout: 0
+  keepAliveInterval: 0
+
+docs: |-
+  Cette étape est optionnelle. Ouvrir une deuxième socket puis envoyer
+  join_room : elle doit recevoir immédiatement round_started, les métadonnées
+  du palier actuel et l'image binaire correspondante.
+
+  Le serveur réutilise le Buffer du cache si ce palier a déjà été généré.
